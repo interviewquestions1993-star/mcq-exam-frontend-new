@@ -93,10 +93,10 @@ interface QuizResults {
         </div>
 
         <div class="action-buttons">
-          <button mat-stroked-button color="primary" class="action-button home-button" (click)="goHome()">
+          <button mat-raised-button class="action-button home-button" (click)="goHome()">
             🏠 Home
           </button>
-          <button mat-raised-button color="primary" class="action-button retake-button" (click)="retakeQuiz()">
+          <button mat-raised-button class="action-button retake-button" (click)="retakeQuiz()">
             🔄 Retake Quiz
           </button>
         </div>
