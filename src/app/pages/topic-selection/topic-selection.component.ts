@@ -7,6 +7,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 
 interface TopicConcept {
@@ -27,7 +29,9 @@ interface TopicConcept {
     MatCheckboxModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatInputModule,
+    MatFormFieldModule
   ],
   template: `
     <div class="topic-selection-container">
@@ -68,6 +72,36 @@ interface TopicConcept {
           </mat-card>
         </div>
 
+        <!-- Custom Topics Section -->
+        <div class="custom-topics-section">
+          <mat-card class="custom-topics-card">
+            <mat-card-content>
+              <div class="custom-topics-header">
+                <mat-checkbox
+                  [(ngModel)]="useCustomTopics"
+                  (change)="onCustomTopicsToggle()"
+                  color="primary"
+                ></mat-checkbox>
+                <div class="custom-topics-info">
+                  <h3>Or specify your own topics</h3>
+                  <p>Enter specific concepts or subtopics you want to focus on</p>
+                </div>
+              </div>
+              <div class="custom-topics-input" *ngIf="useCustomTopics">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Enter your topics (comma-separated)</mat-label>
+                  <textarea
+                    matInput
+                    [(ngModel)]="customTopics"
+                    placeholder="e.g., Components, Services, Routing, Forms"
+                    rows="3"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
         <!-- Action Buttons -->
         <div class="action-buttons">
           <button
@@ -75,6 +109,7 @@ interface TopicConcept {
             color="primary"
             class="action-button select-all-button"
             (click)="selectAll()"
+            [disabled]="useCustomTopics"
           >
             Select All
           </button>
@@ -83,6 +118,7 @@ interface TopicConcept {
             color="accent"
             class="action-button clear-all-button"
             (click)="clearAll()"
+            [disabled]="useCustomTopics"
           >
             Clear All
           </button>
@@ -90,10 +126,12 @@ interface TopicConcept {
             mat-raised-button
             color="primary"
             class="action-button start-quiz-button"
-            [disabled]="selectedConcepts.length === 0"
+            [disabled]="(!useCustomTopics && selectedConcepts.length === 0) || (useCustomTopics && !customTopics.trim())"
             (click)="startQuiz()"
           >
-            Start Quiz ({{ selectedConcepts.length }} concepts)
+            Start Quiz
+            <span *ngIf="useCustomTopics && customTopics.trim()"> (Custom Topics)</span>
+            <span *ngIf="!useCustomTopics && selectedConcepts.length > 0"> ({{ selectedConcepts.length }} concepts)</span>
           </button>
         </div>
       </div>
@@ -120,6 +158,8 @@ export class TopicSelectionComponent implements OnInit {
   concepts: TopicConcept[] = [];
   isLoading = false;
   error = '';
+  useCustomTopics = false;
+  customTopics = '';
 
   get selectedConcepts(): TopicConcept[] {
     return this.concepts.filter(c => c.selected);
@@ -247,16 +287,28 @@ export class TopicSelectionComponent implements OnInit {
     this.concepts.forEach(concept => concept.selected = false);
   }
 
+  onCustomTopicsToggle() {
+    if (!this.useCustomTopics) {
+      this.customTopics = '';
+    }
+  }
+
   startQuiz() {
-    if (this.selectedConcepts.length === 0) {
-      this.snackBar.open('Please select at least one concept to start the quiz.', 'Close', {
+    let quizTopic = this.topicName;
+
+    if (this.useCustomTopics && this.customTopics.trim()) {
+      // Use custom topics
+      quizTopic = `${this.topicName}: ${this.customTopics.trim()}`;
+    } else if (this.selectedConcepts.length > 0) {
+      // Use selected concepts
+      const selectedConceptNames = this.selectedConcepts.map(c => c.name);
+      quizTopic = `${this.topicName}: ${selectedConceptNames.join(', ')}`;
+    } else {
+      this.snackBar.open('Please select concepts or specify custom topics to start the quiz.', 'Close', {
         duration: 3000
       });
       return;
     }
-
-    const selectedConceptNames = this.selectedConcepts.map(c => c.name);
-    const quizTopic = `${this.topicName}: ${selectedConceptNames.join(', ')}`;
 
     this.router.navigate(['/quiz', quizTopic]);
   }

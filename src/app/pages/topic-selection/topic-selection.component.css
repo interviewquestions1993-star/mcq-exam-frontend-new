@@ -133,6 +133,53 @@
   border-width: 2px;
 }
 
+.custom-topics-section {
+  margin-top: 16px;
+}
+
+.custom-topics-card {
+  border: 2px solid #e5e7eb;
+  background: linear-gradient(135deg, #fefefe 0%, #f9fafb 100%);
+}
+
+.custom-topics-header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.custom-topics-info {
+  flex: 1;
+}
+
+.custom-topics-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.custom-topics-info p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.custom-topics-input {
+  margin-top: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-width textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
 .error-state {
   display: flex;
   align-items: center;
