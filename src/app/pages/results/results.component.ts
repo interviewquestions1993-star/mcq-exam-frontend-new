@@ -82,9 +82,9 @@ interface QuizResults {
                 <h4>{{ question.question }}</h4>
               </div>
               <div class="answer-details">
-                <p><strong>Your Answer:</strong> {{ results.answers[question.id] || 'Not answered' }}</p>
+                <p><strong>Your Answer:</strong> {{ getAnswerLabelWithText(question, results.answers[question.id]) || 'Not answered' }}</p>
                 <p *ngIf="results.answers[question.id] !== question.correct_answer">
-                  <strong>Correct Answer:</strong> {{ question.correct_answer }}
+                  <strong>Correct Answer:</strong> {{ getAnswerLabelWithText(question, question.correct_answer) || question.correct_answer }}
                 </p>
                 <p class="explanation"><strong>Explanation:</strong> {{ question.explanation }}</p>
               </div>
@@ -154,6 +154,22 @@ export class ResultsComponent implements OnInit {
       sessionStorage.removeItem('quizResults');
       this.router.navigate(['/quiz', this.results.topic]);
     }
+  }
+
+  getAnswerLabelWithText(question: any, answer: string | null): string | null {
+    if (!answer) {
+      return null;
+    }
+
+    const label = answer.trim().toUpperCase();
+    const index = label.charCodeAt(0) - 65;
+    const optionText = question?.options?.[index];
+
+    if (optionText) {
+      return `${label}. ${optionText}`;
+    }
+
+    return answer;
   }
 }
 
