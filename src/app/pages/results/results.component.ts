@@ -72,18 +72,18 @@ interface QuizResults {
             <div
               *ngFor="let question of results.questions"
               class="answer-item"
-              [ngClass]="{ 'correct': results.answers[question.id] === question.correct_answer, 'incorrect': results.answers[question.id] !== question.correct_answer }"
+              [ngClass]="{ 'correct': results.answers[question.localId || question.id] === question.correct_answer, 'incorrect': results.answers[question.localId || question.id] !== question.correct_answer }"
             >
               <div class="answer-header">
                 <div class="answer-status">
-                  <span class="answer-emoji" *ngIf="results.answers[question.id] === question.correct_answer">✅</span>
-                  <span class="answer-emoji" *ngIf="results.answers[question.id] !== question.correct_answer">❌</span>
+                  <span class="answer-emoji" *ngIf="results.answers[question.localId || question.id] === question.correct_answer">✅</span>
+                  <span class="answer-emoji" *ngIf="results.answers[question.localId || question.id] !== question.correct_answer">❌</span>
                 </div>
                 <h4>{{ question.question }}</h4>
               </div>
               <div class="answer-details">
-                <p><strong>Your Answer:</strong> {{ getAnswerLabelWithText(question, results.answers[question.id]) || 'Not answered' }}</p>
-                <p *ngIf="results.answers[question.id] !== question.correct_answer">
+                <p><strong>Your Answer:</strong> {{ getAnswerLabelWithText(question, results.answers[question.localId || question.id]) || 'Not answered' }}</p>
+                <p *ngIf="results.answers[question.localId || question.id] !== question.correct_answer">
                   <strong>Correct Answer:</strong> {{ getAnswerLabelWithText(question, question.correct_answer) || question.correct_answer }}
                 </p>
                 <p class="explanation"><strong>Explanation:</strong> {{ question.explanation }}</p>

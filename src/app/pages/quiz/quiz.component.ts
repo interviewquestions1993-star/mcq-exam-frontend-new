@@ -11,9 +11,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { MCQService, MCQQuestion, MCQResponse } from '../../services/mcq.service';
 
-interface Answer {
-  questionId: number;
-  selectedAnswer: string;
+interface QuizQuestion extends MCQQuestion {
+  localId: string;
 }
 
 @Component({
@@ -52,9 +51,9 @@ interface Answer {
         <div class="progress-header">
           <div class="progress-info">
             <span class="current-question">Question {{ currentIndex + 1 }} of {{ questions.length }}</span>
-            <span class="progress-percentage">{{ ((currentIndex + 1) / questions.length * 100) | number: '1.0-0' }}%</span>
+            <span class="progress-percentage">{{ getCurrentProgress() }}%</span>
           </div>
-          <mat-progress-bar mode="determinate" [value]="((currentIndex + 1) / questions.length * 100)"></mat-progress-bar>
+          <mat-progress-bar mode="determinate" [value]="getCurrentProgress()"></mat-progress-bar>
         </div>
 
         <!-- Question Card -->
@@ -71,14 +70,15 @@ interface Answer {
             <h2 class="question-text">{{ currentQuestion.question }}</h2>
 
             <!-- Options -->
-            <div class="options-container">
-              <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
+                    <div class="options-container">
+              <div *ngFor="let option of currentQuestion.options; let i = index; trackBy: trackByOption" class="option">
                 <label class="option-label">
                   <input
                     type="radio"
-                    [name]="'question-' + currentQuestion.id"
+                    [name]="'question-' + currentQuestion.localId"
                     [value]="getOptionLabel(i)"
-                    [(ngModel)]="selectedAnswers[currentQuestion.id]"
+                    [checked]="getSelectedAnswer(currentQuestion.localId) === getOptionLabel(i)"
+                    (change)="onAnswerChange(currentQuestion.localId, getOptionLabel(i))"
                     class="radio-input"
                   />
                   <span class="option-text">{{ option }}</span>
@@ -145,7 +145,7 @@ interface Answer {
 })
 export class QuizComponent implements OnInit {
   topic: string = '';
-  questions: MCQQuestion[] = [];
+  questions: QuizQuestion[] = [];
   currentIndex = 0;
   isLoading = false;
   loadProgress = 0;
@@ -163,10 +163,10 @@ export class QuizComponent implements OnInit {
   ];
   private loadingInterval: any;
   error: string = '';
-  selectedAnswers: { [key: number]: string } = {};
+  selectedAnswers: { [key: string]: string } = {};
   private moreQuestionsLoading = false;
 
-  get currentQuestion(): MCQQuestion {
+  get currentQuestion(): QuizQuestion {
     return this.questions[this.currentIndex];
   }
 
@@ -190,7 +190,7 @@ export class QuizComponent implements OnInit {
     // Load initial 2 questions
     this.mcqService.generateQuestions(this.topic, 2).subscribe({
       next: (response: MCQResponse) => {
-        this.questions = response.questions;
+        this.questions = this.mapQuestions(response.questions);
         this.completeLoadingProgress();
         this.isLoading = false;
         
@@ -210,9 +210,11 @@ export class QuizComponent implements OnInit {
     this.moreQuestionsLoading = true;
     this.mcqService.generateQuestions(this.topic, 3).subscribe({
       next: (response: MCQResponse) => {
-        // Add the new questions to the existing array
-        this.questions = [...this.questions, ...response.questions];
-        this.moreQuestionsLoading = false;
+        setTimeout(() => {
+          const additional = this.mapQuestions(response.questions);
+          additional.forEach(question => this.questions.push(question));
+          this.moreQuestionsLoading = false;
+        }, 100);
       },
       error: (err) => {
         console.error('Failed to load additional questions:', err);
@@ -264,11 +266,34 @@ export class QuizComponent implements OnInit {
     return String.fromCharCode(65 + index); // A, B, C, D
   }
 
+  trackByOption(index: number, option: string): string {
+    return `${this.currentQuestion.localId}-${index}`;
+  }
+
+  getCurrentProgress(): number {
+    return Math.round(((this.currentIndex + 1) / this.questions.length) * 100);
+  }
+
+  getSelectedAnswer(localId: string): string {
+    return this.selectedAnswers[localId] || '';
+  }
+
+  onAnswerChange(localId: string, answer: string) {
+    this.selectedAnswers[localId] = answer;
+  }
+
+  private mapQuestions(questions: MCQQuestion[]): QuizQuestion[] {
+    return questions.map((question, index) => ({
+      ...question,
+      localId: `${question.id}-${Date.now()}-${Math.random().toString(36).slice(2)}-${index}`
+    }));
+  }
+
   submitQuiz() {
     // Calculate score
     let score = 0;
     this.questions.forEach(question => {
-      if (this.selectedAnswers[question.id] === question.correct_answer) {
+      if (this.selectedAnswers[question.localId] === question.correct_answer) {
         score++;
       }
     });
