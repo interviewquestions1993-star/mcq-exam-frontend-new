@@ -4,13 +4,33 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { NCERT_CURRICULUM } from '../../data/ncert-curriculum';
 
-interface Subject {
+interface SubjectCard {
+  key: string;
   name: string;
   icon: string;
   description: string;
   available: boolean;
 }
+
+const SUBJECT_META: Record<string, { icon: string; description: string; displayName: string }> = {
+  math: { icon: '🔢', description: 'Numbers, Algebra, Geometry & Statistics', displayName: 'Mathematics' },
+  english: { icon: '📝', description: 'Language, Literature & Writing', displayName: 'English' },
+  hindi: { icon: '📚', description: 'Language, Literature & Grammar', displayName: 'Hindi' },
+  evs: { icon: '🌿', description: 'Environmental studies and life skills', displayName: 'Environmental Studies' },
+  science: { icon: '🧪', description: 'Physics, Chemistry & Biology', displayName: 'Science' },
+  'social-history': { icon: '🏛️', description: 'Indian history and cultural heritage', displayName: 'History' },
+  'social-geography': { icon: '🗺️', description: 'Physical geography and environment', displayName: 'Geography' },
+  'social-civics': { icon: '⚖️', description: 'Civics, democracy and citizenship', displayName: 'Civics' },
+  economics: { icon: '💰', description: 'Basic economic principles and national economy', displayName: 'Economics' },
+  physics: { icon: '⚛️', description: 'Advanced physics concepts', displayName: 'Physics' },
+  chemistry: { icon: '🧫', description: 'Advanced chemistry concepts', displayName: 'Chemistry' },
+  biology: { icon: '🧬', description: 'Advanced biology concepts', displayName: 'Biology' },
+  'computer-science': { icon: '💻', description: 'Programming and digital literacy', displayName: 'Computer Science' },
+  accountancy: { icon: '📈', description: 'Accounting principles and finance', displayName: 'Accountancy' },
+  'business-studies': { icon: '🏢', description: 'Business, management and entrepreneurship', displayName: 'Business Studies' }
+};
 
 @Component({
   selector: 'app-cbse-subjects',
@@ -41,7 +61,7 @@ interface Subject {
             *ngFor="let subject of subjects"
             class="subject-card"
             [class.unavailable]="!subject.available"
-            (click)="subject.available ? selectSubject(subject.name) : null"
+            (click)="subject.available ? selectSubject(subject.key) : null"
           >
             <mat-card-content>
               <div class="subject-content">
@@ -60,7 +80,7 @@ interface Subject {
 })
 export class CbseSubjectsComponent implements OnInit {
   classNumber = 0;
-  subjects: Subject[] = [];
+  subjects: SubjectCard[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -72,77 +92,37 @@ export class CbseSubjectsComponent implements OnInit {
     this.loadSubjects();
   }
 
-  loadSubjects() {
-    // Base subjects available for all classes
-    const baseSubjects: Subject[] = [
-      {
-        name: 'Mathematics',
-        icon: '🔢',
-        description: 'Numbers, Algebra, Geometry & Statistics',
-        available: true
-      },
-      {
-        name: 'Science',
-        icon: '🧪',
-        description: 'Physics, Chemistry & Biology',
-        available: true
-      },
-      {
-        name: 'Social Science',
-        icon: '🌍',
-        description: 'History, Geography & Civics',
-        available: true
-      },
-      {
-        name: 'English',
-        icon: '📝',
-        description: 'Literature, Grammar & Writing',
-        available: true
-      },
-      {
-        name: 'Hindi',
-        icon: '📚',
-        description: 'Language, Literature & Grammar',
-        available: true
-      }
-    ];
-
-    // Add class-specific subjects
-    if (this.classNumber >= 9) {
-      baseSubjects.push({
-        name: 'Computer Science',
-        icon: '💻',
-        description: 'Programming & Digital Literacy',
-        available: false // Coming soon
-      });
-    }
-
-    if (this.classNumber >= 11) {
-      baseSubjects.push({
-        name: 'Physics',
-        icon: '⚛️',
-        description: 'Advanced Physics Concepts',
-        available: false // Coming soon
-      });
-      baseSubjects.push({
-        name: 'Chemistry',
-        icon: '🧫',
-        description: 'Advanced Chemistry Concepts',
-        available: false // Coming soon
-      });
-      baseSubjects.push({
-        name: 'Biology',
-        icon: '🧬',
-        description: 'Advanced Biology Concepts',
-        available: false // Coming soon
-      });
-    }
-
-    this.subjects = baseSubjects;
+  private getClassCurriculum() {
+    return NCERT_CURRICULUM.find(item => item.classNumber === this.classNumber);
   }
 
-  selectSubject(subjectName: string) {
-    this.router.navigate(['/cbse', this.classNumber, 'subjects', subjectName.toLowerCase().replace(' ', '-'), 'chapters']);
+  loadSubjects() {
+    const classCurriculum = this.getClassCurriculum();
+    if (!classCurriculum) {
+      this.subjects = [];
+      return;
+    }
+
+    this.subjects = classCurriculum.subjects.map(subject => {
+      const subjectKey = subject.id.replace(/^class\d+-/, '');
+      const meta = SUBJECT_META[subjectKey] || {
+        icon: '📘',
+        description: 'NCERT curriculum subject',
+        displayName: subject.name
+      };
+
+      return {
+        key: subjectKey,
+        name: meta.displayName,
+        icon: meta.icon,
+        description: meta.description,
+        available: true
+      };
+    });
+  }
+
+  selectSubject(subjectKey: string) {
+    this.router.navigate(['/cbse', this.classNumber, 'subjects', subjectKey, 'chapters']);
   }
 
   goBack() {

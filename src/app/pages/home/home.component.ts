@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatCardModule,
     MatInputModule,
     MatGridListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatIconModule
   ],
   template: `
     <div class="home-container">
@@ -50,6 +52,19 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
             <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
           </button>
         </div>
+      </div>
+
+      <!-- Search Example Tips -->
+      <div class="search-hint-card">
+        <p class="hint-title">Try these search terms</p>
+        <div class="hint-chip-row">
+          <span class="hint-chip">🔎 React Advanced Interview Questions</span>
+          <span class="hint-chip">🔎 Angular Architect Interview Questions</span>
+          <span class="hint-chip">🔎 Azure Interview Questions</span>
+          <span class="hint-chip">🔎 CBSE Class 10 Science Questions</span>
+        </div>
+        <p class="hint-note">...and many more topics are supported.</p>
+        <p class="hint-help"><mat-icon class="hint-mail-icon">email</mat-icon><a class="hint-mail-link" href="mailto:interviewquestions1993@gmail.com">Send us a mail if you want any new topics added.</a></p>
       </div>
 
       <!-- Flexibility Section -->
