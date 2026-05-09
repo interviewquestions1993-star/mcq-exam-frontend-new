@@ -54,13 +54,13 @@ interface TopicConcept {
 
       <!-- Concepts List -->
       <div *ngIf="!isLoading && concepts.length > 0" class="concepts-section">
-        <div class="concepts-grid">
-          <mat-card *ngFor="let concept of concepts" class="concept-card" [class.selected]="concept.selected">
+          <mat-card *ngFor="let concept of concepts" class="concept-card" [class.selected]="concept.selected && !useCustomTopics" [class.disabled]="useCustomTopics">
             <mat-card-content>
               <div class="concept-header">
                 <mat-checkbox
                   [(ngModel)]="concept.selected"
                   (change)="onConceptToggle(concept)"
+                  [disabled]="useCustomTopics"
                   color="primary"
                 ></mat-checkbox>
                 <div class="concept-info">
@@ -288,7 +288,11 @@ export class TopicSelectionComponent implements OnInit {
   }
 
   onCustomTopicsToggle() {
-    if (!this.useCustomTopics) {
+    if (this.useCustomTopics) {
+      // Clear all concept selections when switching to custom topics
+      this.concepts.forEach(concept => concept.selected = false);
+    } else {
+      // Clear custom topics when switching back to predefined concepts
       this.customTopics = '';
     }
   }

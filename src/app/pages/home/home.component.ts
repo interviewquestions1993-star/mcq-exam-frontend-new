@@ -105,7 +105,8 @@ export class HomeComponent {
     { name: 'TypeScript', icon: '🔷', difficulty: 'All Levels' },
     { name: 'Machine Learning', icon: '🧠', difficulty: 'All Levels' },
     { name: 'Data Science', icon: '📊', difficulty: 'All Levels' },
-    { name: 'Artificial Intelligence', icon: '🤖', difficulty: 'All Levels' }
+    { name: 'Artificial Intelligence', icon: '🤖', difficulty: 'All Levels' },
+    { name: 'CBSE', icon: '📚', difficulty: 'Classes 1-12' }
   ];
 
   constructor(private router: Router) {}
@@ -121,7 +122,11 @@ export class HomeComponent {
   }
 
   startQuizWithTopic(topicName: string) {
-    this.router.navigate(['/topics', topicName]);
+    if (topicName === 'CBSE') {
+      this.router.navigate(['/cbse']);
+    } else {
+      this.router.navigate(['/topics', topicName]);
+    }
   }
 }
 
