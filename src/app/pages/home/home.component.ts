@@ -131,7 +131,7 @@ export class HomeComponent {
     if (this.topic.trim()) {
       this.isLoading = true;
       setTimeout(() => {
-        this.router.navigate(['/topics', this.topic.trim()]);
+        this.router.navigate(['/quiz', this.topic.trim()]);
         this.isLoading = false;
       }, 500);
     }
