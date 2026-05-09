@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink],
   template: `
     <header class="app-header">
       <div class="toolbar-container">
-        <span class="logo">🎓 MCQ Exam Preparer</span>
+        <a class="logo" routerLink="/">🎓 MCQ Exam Preparer</a>
       </div>
     </header>
     <div class="main-content">

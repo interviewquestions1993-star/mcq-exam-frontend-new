@@ -34,8 +34,16 @@ interface Answer {
     <div class="quiz-container">
       <!-- Loading State -->
       <div *ngIf="isLoading" class="loading-state">
-        <div class="loader-ring"><div></div></div>
-        <p class="loader-text">Loading questions for {{ topic }}...</p>
+        <div class="loading-card">
+          <p class="loader-heading">Preparing your quiz...</p>
+          <div class="loading-bar-wrapper">
+            <mat-progress-bar mode="determinate" [value]="loadProgress"></mat-progress-bar>
+            <div class="loading-progress-text">{{ loadProgress }}% complete</div>
+          </div>
+          <div class="loading-steps">
+            <span *ngFor="let step of loadingSteps" [class.active]="loadProgress >= step.value">{{ step.label }}</span>
+          </div>
+        </div>
       </div>
 
       <!-- Quiz State -->
@@ -140,6 +148,20 @@ export class QuizComponent implements OnInit {
   questions: MCQQuestion[] = [];
   currentIndex = 0;
   isLoading = false;
+  loadProgress = 0;
+  loadingSteps = [
+    { value: 10, label: '10% complete' },
+    { value: 20, label: '20% complete' },
+    { value: 30, label: '30% complete' },
+    { value: 40, label: '40% complete' },
+    { value: 50, label: '50% complete' },
+    { value: 60, label: '60% complete' },
+    { value: 70, label: '70% complete' },
+    { value: 80, label: '80% complete' },
+    { value: 90, label: '90% complete' },
+    { value: 100, label: '100% complete' }
+  ];
+  private loadingInterval: any;
   error: string = '';
   selectedAnswers: { [key: number]: string } = {};
 
@@ -162,17 +184,45 @@ export class QuizComponent implements OnInit {
   loadQuestions() {
     this.isLoading = true;
     this.error = '';
+    this.startLoadingProgress();
     this.mcqService.generateQuestions(this.topic, 5).subscribe({
       next: (response: MCQResponse) => {
         this.questions = response.questions;
+        this.completeLoadingProgress();
         this.isLoading = false;
       },
       error: (err) => {
         this.error = 'Failed to load questions. Please try again.';
+        this.stopLoadingProgress();
         this.isLoading = false;
         console.error(err);
       }
     });
+  }
+
+  private startLoadingProgress() {
+    this.loadProgress = 0;
+    this.stopLoadingProgress();
+    this.loadingInterval = setInterval(() => {
+      if (this.loadProgress < 90) {
+        this.loadProgress += 10;
+      } else {
+        this.loadProgress = 100;
+        this.stopLoadingProgress();
+      }
+    }, 250);
+  }
+
+  private completeLoadingProgress() {
+    this.loadProgress = 100;
+    this.stopLoadingProgress();
+  }
+
+  private stopLoadingProgress() {
+    if (this.loadingInterval) {
+      clearInterval(this.loadingInterval);
+      this.loadingInterval = null;
+    }
   }
 
   nextQuestion() {
