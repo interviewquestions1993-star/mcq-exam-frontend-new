@@ -1,6 +1,7 @@
 # Angular
 /dist/
 /node_modules/
+.angular/
 npm-debug.log
 *.log
 
