@@ -70,20 +70,24 @@ interface QuizQuestion extends MCQQuestion {
             <h2 class="question-text">{{ currentQuestion.question }}</h2>
 
             <!-- Options -->
-                    <div class="options-container">
-              <div *ngFor="let option of currentQuestion.options; let i = index; trackBy: trackByOption" class="option">
-                <label class="option-label">
-                  <input
-                    type="radio"
-                    [name]="'question-' + currentQuestion.localId"
-                    [value]="getOptionLabel(i)"
-                    [checked]="getSelectedAnswer(currentQuestion.localId) === getOptionLabel(i)"
-                    (change)="onAnswerChange(currentQuestion.localId, getOptionLabel(i))"
-                    class="radio-input"
-                  />
-                  <span class="option-text">{{ option }}</span>
-                </label>
-              </div>
+            <div class="options-container">
+              <ng-container *ngIf="currentQuestion.options?.length; else noOptions">
+                <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
+                  <label class="option-label">
+                    <input
+                      type="radio"
+                      [name]="'question-' + currentQuestion.localId"
+                      [value]="getOptionLabel(i)"
+                      [(ngModel)]="selectedAnswers[currentQuestion.localId]"
+                      class="radio-input"
+                    />
+                    <span class="option-text">{{ option }}</span>
+                  </label>
+                </div>
+              </ng-container>
+              <ng-template #noOptions>
+                <div class="option empty-state">Questions are loading or unavailable. Please wait.</div>
+              </ng-template>
             </div>
           </mat-card>
         </div>
@@ -103,18 +107,21 @@ interface QuizQuestion extends MCQQuestion {
           <span class="question-counter">{{ currentIndex + 1 }} / {{ questions.length }}</span>
 
           <button
-            *ngIf="currentIndex < questions.length - 1"
+            *ngIf="currentIndex < questions.length - 1 || (currentIndex === 1 && moreQuestionsLoading)"
             mat-raised-button
             color="primary"
             (click)="nextQuestion()"
+            [disabled]="currentIndex === 1 && moreQuestionsLoading"
             class="nav-button"
           >
-            Next
-            <mat-icon>arrow_forward</mat-icon>
+            <span *ngIf="!(currentIndex === 1 && moreQuestionsLoading)">Next</span>
+            <span *ngIf="currentIndex === 1 && moreQuestionsLoading">Loading...</span>
+            <mat-icon *ngIf="!(currentIndex === 1 && moreQuestionsLoading)">arrow_forward</mat-icon>
+            <mat-spinner *ngIf="currentIndex === 1 && moreQuestionsLoading" diameter="20"></mat-spinner>
           </button>
 
           <button
-            *ngIf="currentIndex === questions.length - 1"
+            *ngIf="currentIndex === questions.length - 1 && !moreQuestionsLoading"
             mat-raised-button
             color="accent"
             (click)="submitQuiz()"
@@ -164,7 +171,7 @@ export class QuizComponent implements OnInit {
   private loadingInterval: any;
   error: string = '';
   selectedAnswers: { [key: string]: string } = {};
-  private moreQuestionsLoading = false;
+  moreQuestionsLoading = false;
 
   get currentQuestion(): QuizQuestion {
     return this.questions[this.currentIndex];
@@ -190,12 +197,17 @@ export class QuizComponent implements OnInit {
     // Load initial 2 questions
     this.mcqService.generateQuestions(this.topic, 2).subscribe({
       next: (response: MCQResponse) => {
-        this.questions = this.mapQuestions(response.questions);
+        this.questions = this.mapQuestions(response.questions || []);
         this.completeLoadingProgress();
         this.isLoading = false;
-        
-        // Load 3 more questions in background
-        this.loadAdditionalQuestions();
+
+        const missingQuestions = Math.max(0, 2 - this.questions.length);
+        if (missingQuestions > 0) {
+          this.loadAdditionalQuestions(missingQuestions, true);
+        }
+
+        // Load 3 more questions in background regardless of initial count
+        this.loadAdditionalQuestions(3);
       },
       error: (err) => {
         this.error = 'Failed to load questions. Please try again.';
@@ -206,18 +218,18 @@ export class QuizComponent implements OnInit {
     });
   }
 
-  private loadAdditionalQuestions() {
+  private loadAdditionalQuestions(numQuestions: number = 3, silent: boolean = false) {
     this.moreQuestionsLoading = true;
-    this.mcqService.generateQuestions(this.topic, 3).subscribe({
+    this.mcqService.generateQuestions(this.topic, numQuestions).subscribe({
       next: (response: MCQResponse) => {
-        setTimeout(() => {
-          const additional = this.mapQuestions(response.questions);
-          additional.forEach(question => this.questions.push(question));
-          this.moreQuestionsLoading = false;
-        }, 100);
+        const additional = this.mapQuestions(response.questions || []);
+        additional.forEach(question => this.questions.push(question));
+        this.moreQuestionsLoading = false;
       },
       error: (err) => {
-        console.error('Failed to load additional questions:', err);
+        if (!silent) {
+          console.error('Failed to load additional questions:', err);
+        }
         this.moreQuestionsLoading = false;
       }
     });
@@ -266,20 +278,8 @@ export class QuizComponent implements OnInit {
     return String.fromCharCode(65 + index); // A, B, C, D
   }
 
-  trackByOption(index: number, option: string): string {
-    return `${this.currentQuestion.localId}-${index}`;
-  }
-
   getCurrentProgress(): number {
     return Math.round(((this.currentIndex + 1) / this.questions.length) * 100);
-  }
-
-  getSelectedAnswer(localId: string): string {
-    return this.selectedAnswers[localId] || '';
-  }
-
-  onAnswerChange(localId: string, answer: string) {
-    this.selectedAnswers[localId] = answer;
   }
 
   private mapQuestions(questions: MCQQuestion[]): QuizQuestion[] {
