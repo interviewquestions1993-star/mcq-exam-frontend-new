@@ -9,14 +9,17 @@
 html, body {
   height: 100%;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #f5f7fa;
-  color: #333;
+  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+  color: #111827;
 }
 
 body {
   margin: 0;
   padding: 0;
+  background-image: radial-gradient(circle at top left, rgba(99, 102, 241, 0.12), transparent 28%),
+                    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.12), transparent 22%);
 }
+
 
 /* Material Theme Customization */
 .mat-mdc-card {
