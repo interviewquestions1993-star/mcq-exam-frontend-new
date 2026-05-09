@@ -25,7 +25,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       <!-- Hero Section -->
       <div class="hero-section">
         <h1 class="hero-title">Master Your Skills</h1>
-        <p class="hero-subtitle">Practice with AI-Generated MCQ Questions</p>
+        <p class="hero-subtitle">Practice with AI-Generated Questions for Exams & Interviews</p>
       </div>
 
       <!-- Search Section -->
@@ -36,7 +36,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
             (keyup.enter)="startQuiz()"
             type="text"
             class="search-input"
-            placeholder="Enter a topic (e.g., Angular, React, Python)"
+            placeholder="🎯 Enter any topic you're curious about! (e.g., AI, Data Science, CBSE Class 10 Science, Machine Learning...)"
             [disabled]="isLoading"
           />
           <button
@@ -63,7 +63,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
             from Bollywood movies to ancient history, space exploration to cooking techniques!
           </p>
           <p class="flexibility-highlight">
-            🚀 Give any topic you love, and we'll create engaging MCQ questions to challenge and entertain you!
+            🚀 Give any topic you love, and we'll create engaging questions to challenge and entertain you!
           </p>
         </div>
       </div>
