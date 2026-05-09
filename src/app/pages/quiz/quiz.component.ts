@@ -34,8 +34,8 @@ interface Answer {
     <div class="quiz-container">
       <!-- Loading State -->
       <div *ngIf="isLoading" class="loading-state">
-        <mat-spinner></mat-spinner>
-        <p>Loading questions for {{ topic }}...</p>
+        <div class="loader-ring"><div></div></div>
+        <p class="loader-text">Loading questions for {{ topic }}...</p>
       </div>
 
       <!-- Quiz State -->
@@ -150,10 +150,41 @@ interface Answer {
       gap: 20px;
     }
 
-    .loading-state p {
-      font-size: 16px;
-      color: #666;
+    .loader-ring {
+      width: 96px;
+      height: 96px;
+      position: relative;
+    }
+
+    .loader-ring::before,
+    .loader-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 10px solid rgba(124, 58, 237, 0.16);
+    }
+
+    .loader-ring::after {
+      border-top-color: #7c3aed;
+      border-right-color: transparent;
+      animation: spin 1s linear infinite;
+      transform: rotate(45deg);
+    }
+
+    .loader-text {
+      font-size: 1rem;
+      color: #4b5563;
       margin: 0;
+      font-weight: 700;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .quiz-state {
@@ -165,8 +196,9 @@ interface Answer {
     .progress-header {
       background: white;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.95);
     }
 
     .progress-info {
@@ -176,16 +208,19 @@ interface Answer {
       margin-bottom: 12px;
       font-size: 14px;
       color: #666;
+      font-family: 'Inter', sans-serif;
     }
 
     .current-question {
       font-weight: 600;
       color: #333;
+      font-family: 'Inter', sans-serif;
     }
 
     .progress-percentage {
       font-weight: 600;
       color: #667eea;
+      font-family: 'Inter', sans-serif;
     }
 
     .question-card {
@@ -195,7 +230,9 @@ interface Answer {
     .question-container {
       padding: 40px;
       background: white;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      border: 1px solid rgba(226, 232, 240, 0.95);
     }
 
     .question-header {
@@ -207,11 +244,13 @@ interface Answer {
 
     .difficulty-badge {
       display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
+      padding: 6px 14px;
+      border-radius: 999px;
       font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
     }
 
     .difficulty-easy {
@@ -235,6 +274,7 @@ interface Answer {
       color: #333;
       margin: 0 0 32px 0;
       line-height: 1.6;
+      font-family: 'Inter', sans-serif;
     }
 
     .options-container {
@@ -254,10 +294,12 @@ interface Answer {
       gap: 12px;
       cursor: pointer;
       flex: 1;
-      padding: 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 6px;
-      transition: all 0.3s;
+      padding: 18px;
+      border: 2px solid #e5e7eb;
+      border-radius: 18px;
+      background: #f8fafc;
+      transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
     }
 
     .radio-input {
@@ -271,6 +313,7 @@ interface Answer {
       color: #333;
       font-size: 15px;
       line-height: 1.5;
+      font-family: 'Inter', sans-serif;
     }
 
     .option-label:hover {
@@ -289,25 +332,44 @@ interface Answer {
       gap: 16px;
       background: white;
       padding: 24px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
       flex-wrap: wrap;
+      border: 1px solid rgba(226, 232, 240, 0.95);
     }
 
     .nav-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      min-width: 160px;
+      height: 54px;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 18px 40px rgba(102, 126, 234, 0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      color: white;
+    }
+
+    .nav-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 22px 50px rgba(102, 126, 234, 0.24);
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      color: white;
     }
 
     .question-counter {
-      font-weight: 600;
-      color: #666;
+      font-weight: 700;
+      color: #4b5563;
       font-size: 14px;
+      font-family: 'Inter', sans-serif;
     }
 
     .submit-button {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', sans-serif;
     }
 
     .error-state {
@@ -320,25 +382,31 @@ interface Answer {
     .error-content {
       text-align: center;
       padding: 40px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.95);
     }
 
     .error-icon {
       font-size: 64px;
       width: 64px;
       height: 64px;
-      color: #d32f2f;
+      color: #ef4444;
       margin: 0 auto 20px;
     }
 
     .error-content h2 {
       font-size: 24px;
-      color: #333;
+      color: #111827;
       margin: 0 0 12px 0;
+      font-family: 'Inter', sans-serif;
     }
 
     .error-content p {
-      color: #666;
+      color: #4b5563;
       margin: 0 0 24px 0;
+      font-family: 'Inter', sans-serif;
     }
 
     @media (max-width: 768px) {

@@ -17,34 +17,41 @@ import { RouterOutlet } from '@angular/router';
   `,
   styles: [`
     .app-header {
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 24px;
     }
 
     .toolbar-container {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 16px 20px;
+      padding: 0px 20px;
+      height: 72px;
     }
 
     .logo {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
     }
 
     .main-content {
-      min-height: calc(100vh - 72px);
-      background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+      min-height: calc(100vh - 84px);
+      background-color: #f5f7fa;
+      padding: 84px 0 24px;
     }
   `]
 })

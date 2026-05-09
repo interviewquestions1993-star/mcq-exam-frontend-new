@@ -101,11 +101,25 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     .hero-section {
       text-align: center;
       padding: 80px 24px;
-      background: linear-gradient(135deg, #6557ee 0%, #4328d6 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border-radius: 32px;
       color: white;
-      box-shadow: 0 28px 80px rgba(67, 40, 214, 0.18);
+      box-shadow: 0 28px 80px rgba(102, 126, 234, 0.18);
       margin-bottom: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      top: -80px;
+      right: -80px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      filter: blur(18px);
     }
 
     .hero-title {
@@ -114,6 +128,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       font-weight: 800;
       margin: 0 0 18px;
       letter-spacing: -0.05em;
+      position: relative;
+      z-index: 1;
+      font-family: 'Inter', sans-serif;
     }
 
     .hero-subtitle {
@@ -122,14 +139,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       margin: 0 auto;
       max-width: 680px;
       line-height: 1.7;
+      position: relative;
+      z-index: 1;
+      font-family: 'Inter', sans-serif;
     }
 
     .search-section {
       display: flex;
       justify-content: center;
-      margin-top: -32px;
+      margin-top: -38px;
       margin-bottom: 70px;
-      z-index: 1;
+      z-index: 2;
       position: relative;
     }
 
@@ -140,20 +160,28 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       gap: 12px;
       background: #ffffff;
       border-radius: 999px;
-      padding: 12px;
-      box-shadow: 0 25px 60px rgba(102, 126, 234, 0.18);
+      padding: 14px;
+      box-shadow: 0 28px 70px rgba(102, 126, 234, 0.14);
       align-items: center;
     }
 
     .search-input {
       flex: 1;
-      border: none;
+      border: 1px solid rgba(229, 231, 235, 1);
       outline: none;
       font-size: 1rem;
       padding: 18px 22px;
-      background: transparent;
+      background: #ffffff;
       color: #111827;
+      border-radius: 999px;
       min-width: 0;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .search-input:focus {
+      border-color: rgba(102, 126, 234, 0.9);
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
     }
 
     .search-input::placeholder {
@@ -166,12 +194,28 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     }
 
     .search-button {
-      min-width: 150px;
-      height: 52px;
+      min-width: 160px;
+      height: 54px;
       border-radius: 999px;
       font-weight: 700;
       letter-spacing: 0.02em;
-      box-shadow: 0 18px 35px rgba(102, 126, 234, 0.2);
+      box-shadow: 0 18px 40px rgba(102, 126, 234, 0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+
+    .search-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 22px 50px rgba(102, 126, 234, 0.24);
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      color: white;
+    }
+
+    .search-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.85;
     }
 
     .popular-section {
@@ -193,20 +237,20 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     }
 
     .topic-card {
-      background: rgba(255, 255, 255, 0.98);
+      background: #ffffff;
       border-radius: 28px;
       padding: 28px 24px;
       text-align: center;
       cursor: pointer;
       transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
-      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);
-      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.95);
     }
 
     .topic-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14);
-      border-color: rgba(102, 126, 234, 0.28);
+      box-shadow: 0 28px 65px rgba(15, 23, 42, 0.16);
+      border-color: rgba(99, 102, 241, 0.35);
     }
 
     .topic-icon {
@@ -218,8 +262,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       margin: 0 auto 18px;
       font-size: 32px;
       border-radius: 22px;
-      background: rgba(99, 102, 241, 0.15);
+      background: rgba(99, 102, 241, 0.12);
       color: #4338ca;
+      box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.18);
     }
 
     .topic-card h3 {
@@ -261,15 +306,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
     .feature-card {
       text-align: center;
-      padding: 22px;
+      padding: 28px;
       border-radius: 28px;
-      border: 1px solid rgba(226, 232, 240, 0.9);
       background: #f8fafc;
       min-height: 240px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      gap: 16px;
+      gap: 18px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(229, 231, 235, 0.95);
     }
 
     .feature-icon {
