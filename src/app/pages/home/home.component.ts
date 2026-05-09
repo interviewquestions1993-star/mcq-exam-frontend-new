@@ -103,7 +103,9 @@ export class HomeComponent {
     { name: 'Python', icon: '🐍', difficulty: 'All Levels' },
     { name: 'JavaScript', icon: '🟨', difficulty: 'All Levels' },
     { name: 'TypeScript', icon: '🔷', difficulty: 'All Levels' },
-    { name: 'Machine Learning', icon: '🧠', difficulty: 'All Levels' }
+    { name: 'Machine Learning', icon: '🧠', difficulty: 'All Levels' },
+    { name: 'Data Science', icon: '📊', difficulty: 'All Levels' },
+    { name: 'Artificial Intelligence', icon: '🤖', difficulty: 'All Levels' }
   ];
 
   constructor(private router: Router) {}
@@ -112,15 +114,14 @@ export class HomeComponent {
     if (this.topic.trim()) {
       this.isLoading = true;
       setTimeout(() => {
-        this.router.navigate(['/quiz', this.topic]);
+        this.router.navigate(['/topics', this.topic.trim()]);
         this.isLoading = false;
       }, 500);
     }
   }
 
   startQuizWithTopic(topicName: string) {
-    this.topic = topicName;
-    this.startQuiz();
+    this.router.navigate(['/topics', topicName]);
   }
 }
 

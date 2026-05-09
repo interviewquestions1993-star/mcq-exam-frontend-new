@@ -210,7 +210,7 @@ export class QuizComponent implements OnInit {
         this.loadProgress = 100;
         this.stopLoadingProgress();
       }
-    }, 250);
+    }, 2000); // 2 seconds per increment for ~20 second total
   }
 
   private completeLoadingProgress() {
