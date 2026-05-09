@@ -4,7 +4,7 @@
 .hero-title{font-size:clamp(2.5rem,5vw,4.2rem);line-height:1.03;font-weight:800;margin:0 0 18px;letter-spacing:-.05em;position:relative;z-index:1;}
 .hero-subtitle{font-size:1.05rem;opacity:.92;margin:0 auto;max-width:680px;line-height:1.7;position:relative;z-index:1;}
 .search-section{display:flex;justify-content:center;margin-top:-38px;margin-bottom:70px;z-index:2;position:relative;}
-.search-container{width:100%;max-width:760px;display:flex;gap:12px;background:#fff;border-radius:999px;padding:14px;box-shadow:0 28px 70px rgba(102,126,234,.14);align-items:center;}
+.search-container{width:100%;max-width:912px;display:flex;gap:12px;background:#fff;border-radius:999px;padding:14px;box-shadow:0 28px 70px rgba(102,126,234,.14);align-items:center;}
 .search-input{flex:1;border:1px solid #e5e7eb;outline:0;font-size:1rem;padding:18px 22px;background:#fff;color:#111827;border-radius:999px;min-width:0;transition:border-color .3s ease,box-shadow .3s ease;}
 .search-input:focus{border-color:rgba(102,126,234,.9);box-shadow:0 0 0 4px rgba(102,126,234,.08);}
 .search-input::placeholder{color:#9ca3af;}
