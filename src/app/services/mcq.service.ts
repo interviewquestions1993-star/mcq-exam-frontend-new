@@ -28,7 +28,7 @@ export class MCQService {
 
   private getApiUrl(): string {
     // Use environment variable for deployed version, fallback to localhost for development
-    const baseUrl = (window as any).__API_URL__ || 'http://localhost:8000';
+    const baseUrl = (window as any).__API_URL__ || 'https://mcq-exam-backend-new--interviewquest1.replit.app';
     return `${baseUrl}/api/mcq/generate`;
   }
 
