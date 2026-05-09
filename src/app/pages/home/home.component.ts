@@ -52,6 +52,22 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         </div>
       </div>
 
+      <!-- Flexibility Section -->
+      <div class="flexibility-section">
+        <div class="flexibility-content">
+          <h2>🎯 Unleash Your Curiosity!</h2>
+          <p class="flexibility-text">
+            This website is incredibly flexible and perfect for everyone! Whether you're a <strong>software engineer</strong> sharpening your coding skills,
+            a <strong>student</strong> preparing for exams, a <strong>government job aspirant</strong> practicing for competitive exams,
+            or just a <strong>fun-seeking person</strong> who wants to quiz yourself on anything that sparks your interest -
+            from Bollywood movies to ancient history, space exploration to cooking techniques!
+          </p>
+          <p class="flexibility-highlight">
+            🚀 Give any topic you love, and we'll create engaging MCQ questions to challenge and entertain you!
+          </p>
+        </div>
+      </div>
+
       <!-- Popular Topics -->
       <div class="popular-section">
         <h2>Popular Topics</h2>
@@ -98,6 +114,7 @@ export class HomeComponent {
   isLoading = false;
 
   popularTopics = [
+    { name: 'CBSE', icon: '📚', difficulty: 'Classes 1-12' },
     { name: 'Angular', icon: '⚡', difficulty: 'All Levels' },
     { name: 'React', icon: '⚛️', difficulty: 'All Levels' },
     { name: 'Python', icon: '🐍', difficulty: 'All Levels' },
@@ -105,8 +122,7 @@ export class HomeComponent {
     { name: 'TypeScript', icon: '🔷', difficulty: 'All Levels' },
     { name: 'Machine Learning', icon: '🧠', difficulty: 'All Levels' },
     { name: 'Data Science', icon: '📊', difficulty: 'All Levels' },
-    { name: 'Artificial Intelligence', icon: '🤖', difficulty: 'All Levels' },
-    { name: 'CBSE', icon: '📚', difficulty: 'Classes 1-12' }
+    { name: 'Artificial Intelligence', icon: '🤖', difficulty: 'All Levels' }
   ];
 
   constructor(private router: Router) {}
