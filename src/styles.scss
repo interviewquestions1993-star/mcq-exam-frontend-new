@@ -83,6 +83,42 @@ select {
   color: white;
 }
 
+/* Shared page card styling */
+.quiz-container .progress-header,
+.quiz-container .question-container,
+.quiz-container .navigation-buttons,
+.quiz-container .error-content,
+.quiz-container .no-results-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.results-container .stat-card,
+.results-container .review-card,
+.results-container .no-results-card,
+.results-container .action-buttons,
+.results-container .no-results mat-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.results-container .answer-item {
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  background: #f8fafc;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.results-container .answer-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;
