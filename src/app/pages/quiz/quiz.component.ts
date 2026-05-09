@@ -164,6 +164,7 @@ export class QuizComponent implements OnInit {
   private loadingInterval: any;
   error: string = '';
   selectedAnswers: { [key: number]: string } = {};
+  private moreQuestionsLoading = false;
 
   get currentQuestion(): MCQQuestion {
     return this.questions[this.currentIndex];
@@ -185,17 +186,37 @@ export class QuizComponent implements OnInit {
     this.isLoading = true;
     this.error = '';
     this.startLoadingProgress();
-    this.mcqService.generateQuestions(this.topic, 5).subscribe({
+    
+    // Load initial 2 questions
+    this.mcqService.generateQuestions(this.topic, 2).subscribe({
       next: (response: MCQResponse) => {
         this.questions = response.questions;
         this.completeLoadingProgress();
         this.isLoading = false;
+        
+        // Load 3 more questions in background
+        this.loadAdditionalQuestions();
       },
       error: (err) => {
         this.error = 'Failed to load questions. Please try again.';
         this.stopLoadingProgress();
         this.isLoading = false;
         console.error(err);
+      }
+    });
+  }
+
+  private loadAdditionalQuestions() {
+    this.moreQuestionsLoading = true;
+    this.mcqService.generateQuestions(this.topic, 3).subscribe({
+      next: (response: MCQResponse) => {
+        // Add the new questions to the existing array
+        this.questions = [...this.questions, ...response.questions];
+        this.moreQuestionsLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load additional questions:', err);
+        this.moreQuestionsLoading = false;
       }
     });
   }
