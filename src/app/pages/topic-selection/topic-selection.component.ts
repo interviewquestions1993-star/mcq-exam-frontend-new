@@ -54,6 +54,7 @@ interface TopicConcept {
 
       <!-- Concepts List -->
       <div *ngIf="!isLoading && concepts.length > 0" class="concepts-section">
+        <div class="concepts-grid">
           <mat-card *ngFor="let concept of concepts" class="concept-card" [class.selected]="concept.selected && !useCustomTopics" [class.disabled]="useCustomTopics">
             <mat-card-content>
               <div class="concept-header">
