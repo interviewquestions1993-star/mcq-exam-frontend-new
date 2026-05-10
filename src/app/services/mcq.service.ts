@@ -27,8 +27,8 @@ export class MCQService {
   constructor(private http: HttpClient) {}
 
   private getApiUrl(): string {
-    // Use environment variable for deployed version, fallback to localhost for development
-    const baseUrl = (window as any).__API_URL__ || 'https://mcq-exam-backend-new--interviewquest1.replit.app';
+    // Use environment variable for deployed version, fallback to Render backend if not set
+    const baseUrl = (window as any).__API_URL__ || 'https://mcq-exam-backend-new.onrender.com';
     return `${baseUrl}/api/mcq/generate`;
   }
 
