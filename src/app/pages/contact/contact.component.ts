@@ -37,7 +37,7 @@ import { RouterLink } from '@angular/router';
               <mat-icon>web</mat-icon>
               <div>
                 <h4>Website</h4>
-                <p>www.mcaexampreparer.com</p>
+                <p>www.ai-mcq-trainer.in</p>
               </div>
             </div>
 
@@ -45,7 +45,7 @@ import { RouterLink } from '@angular/router';
               <mat-icon>location_on</mat-icon>
               <div>
                 <h4>Address</h4>
-                <p>MCA Exam & Interview Preparer<br>
+                <p>MCQ Exam & Interview Preparer<br>
                 Online Platform<br>
                 Global</p>
               </div>

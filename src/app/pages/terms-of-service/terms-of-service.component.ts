@@ -23,13 +23,13 @@ import { RouterLink } from '@angular/router';
           <mat-card-subtitle>Last updated: May 9, 2026</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <p>These Terms of Service ("Terms") govern your use of MCA Exam & Interview Preparer ("we", "us", or "our") website and services. By accessing or using our services, you agree to be bound by these Terms.</p>
+          <p>These Terms of Service ("Terms") govern your use of MCQ Exam & Interview Preparer ("we", "us", or "our") website and services. By accessing or using our services, you agree to be bound by these Terms.</p>
 
           <h3>Acceptance of Terms</h3>
           <p>By using our services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy.</p>
 
           <h3>Description of Service</h3>
-          <p>MCA Exam & Interview Preparer provides AI-powered MCQ generation and interview preparation tools for educational purposes. Our services include:</p>
+          <p>MCQ Exam & Interview Preparer provides AI-powered MCQ generation and interview preparation tools for educational purposes. Our services include:</p>
           <ul>
             <li>Generation of multiple-choice questions</li>
             <li>CBSE curriculum-based content</li>
@@ -48,13 +48,13 @@ import { RouterLink } from '@angular/router';
           </ul>
 
           <h3>Intellectual Property</h3>
-          <p>All content, features, and functionality of our services are owned by MCA Exam & Interview Preparer and are protected by copyright, trademark, and other intellectual property laws.</p>
+          <p>All content, features, and functionality of our services are owned by MCQ Exam & Interview Preparer and are protected by copyright, trademark, and other intellectual property laws.</p>
 
           <h3>Disclaimer of Warranties</h3>
           <p>Our services are provided "as is" without warranties of any kind. We do not guarantee the accuracy, completeness, or reliability of the generated content.</p>
 
           <h3>Limitation of Liability</h3>
-          <p>In no event shall MCA Exam & Interview Preparer be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of our services.</p>
+          <p>In no event shall MCQ Exam & Interview Preparer be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of our services.</p>
 
           <h3>Privacy</h3>
           <p>Your privacy is important to us. Please review our Privacy Policy, which also governs your use of our services.</p>

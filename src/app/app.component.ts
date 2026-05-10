@@ -50,7 +50,7 @@ declare let gtag: Function;
           </a>
         </div>
         <div class="footer-copyright">
-          <p>&copy; 2026 MCA Exam & Interview Preparer. All rights reserved.</p>
+          <p>&copy; 2026 MCQ Exam & Interview Preparer. All rights reserved.</p>
         </div>
       </div>
     </footer>

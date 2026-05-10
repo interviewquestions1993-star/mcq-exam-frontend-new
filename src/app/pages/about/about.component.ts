@@ -19,10 +19,10 @@ import { RouterLink } from '@angular/router';
       </div>
       <mat-card class="about-card">
         <mat-card-header>
-          <mat-card-title>About MCA Exam & Interview Preparer</mat-card-title>
+          <mat-card-title>About MCQ Exam & Interview Preparer</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <p>Welcome to MCA Exam & Interview Preparer, your comprehensive platform for mastering Multiple Choice Questions (MCQs) and preparing for interviews.</p>
+          <p>Welcome to MCQ Exam & Interview Preparer, your comprehensive platform for mastering Multiple Choice Questions (MCQs) and preparing for interviews.</p>
 
           <h3>Our Mission</h3>
           <p>Our mission is to provide students and professionals with high-quality, AI-powered MCQ generation and interview preparation tools that help them excel in their academic and career pursuits.</p>

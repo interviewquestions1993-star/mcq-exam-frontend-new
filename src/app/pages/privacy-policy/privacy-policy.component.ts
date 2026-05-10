@@ -23,7 +23,7 @@ import { RouterLink } from '@angular/router';
           <mat-card-subtitle>Last updated: May 9, 2026</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <p>This Privacy Policy describes how MCA Exam & Interview Preparer ("we", "us", or "our") collects, uses, and protects your information when you use our website and services.</p>
+          <p>This Privacy Policy describes how MCQ Exam & Interview Preparer ("we", "us", or "our") collects, uses, and protects your information when you use our website and services.</p>
 
           <h3>Information We Collect</h3>
           <h4>Personal Information</h4>
