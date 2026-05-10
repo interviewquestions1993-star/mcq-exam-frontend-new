@@ -126,8 +126,19 @@
 
   <!-- API Configuration -->
   <script>
-    // Use deployed backend URL for the Render backend
-    window.__API_URL__ = 'https://mcq-exam-backend-new.onrender.com';
+    // Detect if running locally and use appropriate backend
+    const hostname = window.location.hostname;
+    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '0.0.0.0';
+    
+    if (isLocalhost) {
+      // Use local backend for development
+      window.__API_URL__ = `http://${window.location.hostname}:8000`;
+    } else {
+      // Use deployed backend for production
+      window.__API_URL__ = 'https://mcq-exam-backend-new.onrender.com';
+    }
+    
+    console.log('API URL:', window.__API_URL__);
   </script>
 
   <!-- Google Analytics -->
@@ -153,5 +164,5 @@
 <style>*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;color:#222a42;background-color:#f5f7fa}body{margin:0;padding:0}@media(max-width:768px){body{font-size:14px}}</style><link rel="stylesheet" href="styles.cd2f8948c6bb1fc5.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles.cd2f8948c6bb1fc5.css"></noscript></head>
 <body class="mat-typography">
   <app-root></app-root>
-<script src="runtime.ed67fe083fdb316f.js" type="module"></script><script src="polyfills.9ee96bd3ec9a3358.js" type="module"></script><script src="main.021968cee89e1935.js" type="module"></script></body>
+<script src="runtime.ed67fe083fdb316f.js" type="module"></script><script src="polyfills.9ee96bd3ec9a3358.js" type="module"></script><script src="main.215f481c2b66f0e5.js" type="module"></script></body>
 </html>
