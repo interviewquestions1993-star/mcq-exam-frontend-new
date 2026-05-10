@@ -1,4 +1,4 @@
-.home-container{max-width:1200px;margin:0 auto;padding:24px 20px 60px;}
+.home-container{width:min(100%,1200px);margin:0 auto;padding:24px 16px 60px;}
 .hero-section{text-align:center;padding:80px 24px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:32px;color:#fff;box-shadow:0 28px 80px rgba(102,126,234,.18);margin-bottom:48px;position:relative;overflow:hidden;}
 .hero-section::before{content:'';position:absolute;width:320px;height:320px;top:-80px;right:-80px;background:rgba(255,255,255,.12);border-radius:50%;filter:blur(18px);}
 .hero-title{font-size:clamp(2.5rem,5vw,4.2rem);line-height:1.03;font-weight:800;margin:0 0 18px;letter-spacing:-.05em;position:relative;z-index:1;}
@@ -42,5 +42,94 @@
 .feature-icon{width:60px;height:60px;display:inline-flex;align-items:center;justify-content:center;margin:0 auto;font-size:28px;border-radius:18px;background:rgba(99,102,241,.15);color:#4338ca;}
 .feature-card h3{font-size:1.15rem;font-weight:700;margin:0;color:#111827;}
 .feature-card p{color:#4b5563;line-height:1.75;margin:0;}
-@media (max-width:840px){.home-container{padding:20px 16px 48px;}.hero-section{padding:64px 20px;margin-bottom:40px;}.search-section{margin-bottom:56px;}}
-@media (max-width:640px){.search-container{flex-direction:column;}.search-button{width:100%;}.features-section{padding:48px 20px;}}
+@media (max-width: 840px) {
+  .home-container {
+    padding: 20px 16px 48px;
+  }
+
+  .hero-section {
+    padding: 64px 20px;
+    margin-bottom: 40px;
+  }
+
+  .search-section {
+    margin-bottom: 56px;
+  }
+}
+
+@media (max-width: 640px) {
+  .search-container {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .search-input {
+    padding: 14px 16px;
+  }
+
+  .search-button {
+    width: 100%;
+    min-width: unset;
+    height: 50px;
+  }
+
+  .search-hint-card {
+    padding: 16px;
+  }
+
+  .hero-section::before {
+    width: 220px;
+    height: 220px;
+    top: -50px;
+    right: -40px;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-subtitle {
+    max-width: 100%;
+    font-size: 0.98rem;
+  }
+
+  .features-section {
+    padding: 48px 20px;
+  }
+
+  .flexibility-content {
+    padding: 32px 24px;
+  }
+
+  .feature-card {
+    padding: 24px;
+  }
+
+  .topic-card {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero-section {
+    padding: 48px 18px;
+    border-radius: 24px;
+  }
+
+  .hero-title {
+    font-size: 1.9rem;
+  }
+
+  .search-section {
+    margin-top: -24px;
+  }
+
+  .flexibility-content {
+    padding: 26px 18px;
+  }
+
+  .features-section {
+    padding: 32px 16px;
+  }
+}

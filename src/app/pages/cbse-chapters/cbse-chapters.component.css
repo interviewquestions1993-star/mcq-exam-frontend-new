@@ -1,7 +1,7 @@
 .cbse-chapters-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 20px 60px;
+  width:min(100%,1200px);
+  margin:0 auto;
+  padding:24px 16px 60px;
 }
 
 .header-section {

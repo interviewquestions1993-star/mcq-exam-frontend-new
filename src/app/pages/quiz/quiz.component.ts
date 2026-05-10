@@ -36,8 +36,11 @@ interface QuizQuestion extends MCQQuestion {
         <div class="loading-card">
           <p class="loader-heading">Preparing your quiz...</p>
           <div class="loading-bar-wrapper">
-            <mat-progress-bar mode="determinate" [value]="loadProgress"></mat-progress-bar>
+            <mat-progress-bar mode="determinate" [value]="loadProgress" color="primary" class="stylish-progress"></mat-progress-bar>
             <div class="loading-progress-text">{{ loadProgress }}% complete</div>
+          </div>
+          <div *ngIf="busyMessage" class="loading-hold-message">
+            {{ busyMessage }}
           </div>
           <div class="loading-steps">
             <span *ngFor="let step of loadingSteps" [class.active]="loadProgress >= step.value">{{ step.label }}</span>
@@ -71,7 +74,7 @@ interface QuizQuestion extends MCQQuestion {
 
             <!-- Options -->
             <div class="options-container">
-              <ng-container *ngIf="currentQuestion.options?.length; else noOptions">
+              <ng-container *ngIf="currentQuestion.options.length; else noOptions">
                 <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
                   <label class="option-label">
                     <input
@@ -115,7 +118,9 @@ interface QuizQuestion extends MCQQuestion {
             class="nav-button"
           >
             <span *ngIf="!(currentIndex === 1 && moreQuestionsLoading)">Next</span>
-            <span *ngIf="currentIndex === 1 && moreQuestionsLoading">Loading...</span>
+            <span *ngIf="currentIndex === 1 && moreQuestionsLoading" class="loading-text">
+              {{ loadingMoreMessage }}{{ loadingMoreDots }}
+            </span>
             <mat-icon *ngIf="!(currentIndex === 1 && moreQuestionsLoading)">arrow_forward</mat-icon>
             <mat-spinner *ngIf="currentIndex === 1 && moreQuestionsLoading" diameter="20"></mat-spinner>
           </button>
@@ -156,6 +161,7 @@ export class QuizComponent implements OnInit {
   currentIndex = 0;
   isLoading = false;
   loadProgress = 0;
+  busyMessage = '';
   loadingSteps = [
     { value: 10, label: '10% complete' },
     { value: 20, label: '20% complete' },
@@ -172,6 +178,9 @@ export class QuizComponent implements OnInit {
   error: string = '';
   selectedAnswers: { [key: string]: string } = {};
   moreQuestionsLoading = false;
+  loadingMoreMessage = 'Please wait — pulling more questions';
+  loadingMoreDots = '';
+  private loadingMoreDotsInterval: any;
 
   get currentQuestion(): QuizQuestion {
     return this.questions[this.currentIndex];
@@ -220,29 +229,34 @@ export class QuizComponent implements OnInit {
 
   private loadAdditionalQuestions(numQuestions: number = 3, silent: boolean = false) {
     this.moreQuestionsLoading = true;
+    this.startLoadingMoreAnimation();
     this.mcqService.generateQuestions(this.topic, numQuestions).subscribe({
       next: (response: MCQResponse) => {
         const additional = this.mapQuestions(response.questions || []);
         additional.forEach(question => this.questions.push(question));
         this.moreQuestionsLoading = false;
+        this.stopLoadingMoreAnimation();
       },
       error: (err) => {
         if (!silent) {
           console.error('Failed to load additional questions:', err);
         }
         this.moreQuestionsLoading = false;
+        this.stopLoadingMoreAnimation();
       }
     });
   }
 
   private startLoadingProgress() {
     this.loadProgress = 0;
+    this.busyMessage = '';
     this.stopLoadingProgress();
     this.loadingInterval = setInterval(() => {
       if (this.loadProgress < 90) {
         this.loadProgress += 10;
       } else {
         this.loadProgress = 100;
+        this.busyMessage = 'Servers are busy — please hold on while we fetch your questions.';
         this.stopLoadingProgress();
       }
     }, 2000); // 2 seconds per increment for ~20 second total
@@ -250,7 +264,24 @@ export class QuizComponent implements OnInit {
 
   private completeLoadingProgress() {
     this.loadProgress = 100;
+    this.busyMessage = '';
     this.stopLoadingProgress();
+  }
+
+  private startLoadingMoreAnimation() {
+    this.stopLoadingMoreAnimation();
+    this.loadingMoreDots = '';
+    this.loadingMoreDotsInterval = setInterval(() => {
+      this.loadingMoreDots = this.loadingMoreDots.length < 3 ? this.loadingMoreDots + '.' : '';
+    }, 500);
+  }
+
+  private stopLoadingMoreAnimation() {
+    if (this.loadingMoreDotsInterval) {
+      clearInterval(this.loadingMoreDotsInterval);
+      this.loadingMoreDotsInterval = null;
+    }
+    this.loadingMoreDots = '';
   }
 
   private stopLoadingProgress() {
