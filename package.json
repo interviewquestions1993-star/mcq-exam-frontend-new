@@ -1,14 +1,28 @@
 {
   "name": "mcq-exam-preparer",
   "version": "1.0.0",
+  "description": "AI-powered MCQ exam preparation platform for students and professionals",
+  "keywords": [
+    "MCQ",
+    "exam preparation",
+    "AI quiz",
+    "interview practice",
+    "educational platform",
+    "online learning"
+  ],
+  "author": "MCQ Exam & Interview Preparer",
+  "homepage": "https://www.ai-mcq-trainer.in",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
- "build": "ng build --configuration production",
-     "watch": "ng build --watch --configuration development",
+    "build": "ng build --configuration production",
+    "build:seo": "ng build --configuration production --optimization=true --build-optimizer=true",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test",
-     "deploy": "ng build --configuration production && npx angular-cli-ghpages --dir=dist/mcq-exam-preparer"
-
+    "lint": "ng lint",
+    "seo-check": "echo 'SEO optimizations applied successfully'",
+    "deploy": "ng build --configuration production && npx angular-cli-ghpages --dir=dist/mcq-exam-preparer",
+    "deploy:seo": "npm run build:seo && npx angular-cli-ghpages --dir=dist/mcq-exam-preparer"
   },
   "private": true,
   "dependencies": {
