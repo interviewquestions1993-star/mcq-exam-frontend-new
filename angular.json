@@ -23,7 +23,7 @@
             "baseHref": "/mcq-exam-frontend-new/",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": ["src/favicon.ico", "src/assets", "public"],
             "styles": ["src/styles.scss"],
             "scripts": []
           },
