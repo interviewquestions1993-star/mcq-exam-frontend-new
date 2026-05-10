@@ -52,6 +52,35 @@ import { MatIconModule } from '@angular/material/icon';
             <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
           </button>
         </div>
+        <div class="question-count-group">
+          <label class="count-pill">
+            <input
+              type="radio"
+              name="questionCount"
+              [value]="5"
+              [(ngModel)]="questionCount"
+              class="count-input"
+            />
+            <div class="pill-content">
+              <span class="pill-label">5 Questions</span>
+              <span class="pill-subtitle">Default quick set</span>
+            </div>
+          </label>
+
+          <label class="count-pill">
+            <input
+              type="radio"
+              name="questionCount"
+              [value]="10"
+              [(ngModel)]="questionCount"
+              class="count-input"
+            />
+            <div class="pill-content">
+              <span class="pill-label">10 Questions</span>
+              <span class="pill-subtitle">Full practice set</span>
+            </div>
+          </label>
+        </div>
       </div>
 
       <!-- Search Example Tips -->
@@ -126,6 +155,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class HomeComponent {
   topic = '';
+  questionCount = 5;
   isLoading = false;
 
   popularTopics = [
@@ -146,7 +176,9 @@ export class HomeComponent {
     if (this.topic.trim()) {
       this.isLoading = true;
       setTimeout(() => {
-        this.router.navigate(['/quiz', this.topic.trim()]);
+        this.router.navigate(['/quiz', this.topic.trim()], {
+          queryParams: { count: this.questionCount }
+        });
         this.isLoading = false;
       }, 500);
     }

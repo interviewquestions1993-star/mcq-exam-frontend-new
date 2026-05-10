@@ -110,19 +110,19 @@ interface QuizQuestion extends MCQQuestion {
           <span class="question-counter">{{ currentIndex + 1 }} / {{ questions.length }}</span>
 
           <button
-            *ngIf="currentIndex < questions.length - 1 || (currentIndex === 1 && moreQuestionsLoading)"
+            *ngIf="currentIndex < questions.length - 1 || (currentIndex === questions.length - 1 && moreQuestionsLoading)"
             mat-raised-button
             color="primary"
             (click)="nextQuestion()"
-            [disabled]="currentIndex === 1 && moreQuestionsLoading"
+            [disabled]="currentIndex === questions.length - 1 && moreQuestionsLoading"
             class="nav-button"
           >
-            <span *ngIf="!(currentIndex === 1 && moreQuestionsLoading)">Next</span>
-            <span *ngIf="currentIndex === 1 && moreQuestionsLoading" class="loading-text">
+            <span *ngIf="!(currentIndex === questions.length - 1 && moreQuestionsLoading)">Next</span>
+            <span *ngIf="currentIndex === questions.length - 1 && moreQuestionsLoading" class="loading-text">
               {{ loadingMoreMessage }}{{ loadingMoreDots }}
             </span>
-            <mat-icon *ngIf="!(currentIndex === 1 && moreQuestionsLoading)">arrow_forward</mat-icon>
-            <mat-spinner *ngIf="currentIndex === 1 && moreQuestionsLoading" diameter="20"></mat-spinner>
+            <mat-icon *ngIf="!(currentIndex === questions.length - 1 && moreQuestionsLoading)">arrow_forward</mat-icon>
+            <mat-spinner *ngIf="currentIndex === questions.length - 1 && moreQuestionsLoading" diameter="20"></mat-spinner>
           </button>
 
           <button
@@ -160,6 +160,7 @@ export class QuizComponent implements OnInit {
   questions: QuizQuestion[] = [];
   currentIndex = 0;
   isLoading = false;
+  targetQuestionCount = 5;
   loadProgress = 0;
   busyMessage = '';
   loadingSteps = [
@@ -195,6 +196,8 @@ export class QuizComponent implements OnInit {
 
   ngOnInit() {
     this.topic = this.route.snapshot.paramMap.get('topic') || '';
+    const countParam = Number(this.route.snapshot.queryParamMap.get('count'));
+    this.targetQuestionCount = [5, 10].includes(countParam) ? countParam : 5;
     this.loadQuestions();
   }
 
@@ -212,11 +215,12 @@ export class QuizComponent implements OnInit {
 
         const missingQuestions = Math.max(0, 2 - this.questions.length);
         if (missingQuestions > 0) {
-          this.loadAdditionalQuestions(missingQuestions, true);
+          this.loadAdditionalQuestions(missingQuestions, true, () => {
+            this.startBackgroundFetchSequence();
+          });
+        } else {
+          this.startBackgroundFetchSequence();
         }
-
-        // Load 3 more questions in background regardless of initial count
-        this.loadAdditionalQuestions(3);
       },
       error: (err) => {
         this.error = 'Failed to load questions. Please try again.';
@@ -227,7 +231,7 @@ export class QuizComponent implements OnInit {
     });
   }
 
-  private loadAdditionalQuestions(numQuestions: number = 3, silent: boolean = false) {
+  private loadAdditionalQuestions(numQuestions: number = 3, silent: boolean = false, callback?: () => void) {
     this.moreQuestionsLoading = true;
     this.startLoadingMoreAnimation();
     this.mcqService.generateQuestions(this.topic, numQuestions).subscribe({
@@ -236,6 +240,9 @@ export class QuizComponent implements OnInit {
         additional.forEach(question => this.questions.push(question));
         this.moreQuestionsLoading = false;
         this.stopLoadingMoreAnimation();
+        if (callback) {
+          callback();
+        }
       },
       error: (err) => {
         if (!silent) {
@@ -243,6 +250,9 @@ export class QuizComponent implements OnInit {
         }
         this.moreQuestionsLoading = false;
         this.stopLoadingMoreAnimation();
+        if (callback) {
+          callback();
+        }
       }
     });
   }
@@ -289,6 +299,50 @@ export class QuizComponent implements OnInit {
       clearInterval(this.loadingInterval);
       this.loadingInterval = null;
     }
+  }
+
+  private getBackgroundBatchSizes(): number[] {
+    return this.targetQuestionCount === 10 ? [2, 6] : [3];
+  }
+
+  private startBackgroundFetchSequence() {
+    const remaining = this.targetQuestionCount - this.questions.length;
+    if (remaining <= 0) {
+      return;
+    }
+    const batchSizes = this.getBackgroundBatchSizes();
+    this.loadBackgroundBatch(batchSizes, 0);
+  }
+
+  private loadBackgroundBatch(batchSizes: number[], index: number) {
+    const remaining = Math.max(0, this.targetQuestionCount - this.questions.length);
+    if (index >= batchSizes.length || remaining <= 0) {
+      this.moreQuestionsLoading = false;
+      this.stopLoadingMoreAnimation();
+      return;
+    }
+
+    const batchSize = Math.min(batchSizes[index], remaining);
+    this.moreQuestionsLoading = true;
+    this.startLoadingMoreAnimation();
+    this.mcqService.generateQuestions(this.topic, batchSize).subscribe({
+      next: (response: MCQResponse) => {
+        const additional = this.mapQuestions(response.questions || []);
+        additional.forEach(question => this.questions.push(question));
+
+        if (this.questions.length < this.targetQuestionCount) {
+          this.loadBackgroundBatch(batchSizes, index + 1);
+        } else {
+          this.moreQuestionsLoading = false;
+          this.stopLoadingMoreAnimation();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load background questions:', err);
+        this.moreQuestionsLoading = false;
+        this.stopLoadingMoreAnimation();
+      }
+    });
   }
 
   nextQuestion() {
