@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   template: `
     <div class="home-container">
@@ -40,6 +42,8 @@ import { MatIconModule } from '@angular/material/icon';
             class="search-input"
             placeholder="🎯 Enter any topic you're curious about! (e.g., AI, Data Science, CBSE Class 10 Science, Machine Learning...)"
             [disabled]="isLoading"
+            maxlength="200"
+            pattern="[a-zA-Z0-9\s\-_.,!?]+"
           />
           <button
             (click)="startQuiz()"
@@ -171,18 +175,53 @@ export class HomeComponent {
     { name: 'Artificial Intelligence', icon: '🤖', difficulty: 'All Levels' }
   ];
 
-  constructor(private router: Router) {}
+  // Security: List of banned words to prevent inappropriate content
+  private bannedWords = [
+    'sex', 'adult', 'porn', 'nude', 'naked', 'erotic', 'xxx', 'nsfw',
+    'fuck', 'shit', 'damn', 'bitch', 'asshole', 'cunt', 'dick', 'pussy',
+    'rape', 'murder', 'kill', 'death', 'suicide', 'drugs', 'cocaine', 'heroin',
+    'terrorism', 'bomb', 'explosive', 'hack', 'crack', 'virus', 'malware',
+    'injection', 'sql', 'script', 'javascript', 'alert', 'eval', 'document.cookie'
+  ];
+
+  constructor(private router: Router, private snackBar: MatSnackBar) {}
+
+  // Security: Sanitize input to prevent injection attacks
+  private sanitizeInput(input: string): string {
+    // Remove potentially dangerous characters and limit length
+    return input
+      .replace(/[<>\"'&]/g, '') // Remove HTML/script injection chars
+      .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters
+      .trim()
+      .substring(0, 200); // Limit length to 200 chars
+  }
+
+  // Security: Check if input contains banned words
+  private containsBannedWords(input: string): boolean {
+    const lowerInput = input.toLowerCase();
+    return this.bannedWords.some(word => lowerInput.includes(word.toLowerCase()));
+  }
 
   startQuiz() {
-    if (this.topic.trim()) {
-      this.isLoading = true;
-      setTimeout(() => {
-        this.router.navigate(['/quiz', this.topic.trim()], {
-          queryParams: { count: this.questionCount }
-        });
-        this.isLoading = false;
-      }, 500);
+    const sanitizedTopic = this.sanitizeInput(this.topic);
+    if (!sanitizedTopic) {
+      this.snackBar.open('Please enter a valid topic.', 'Close', { duration: 3000 });
+      return;
     }
+
+    // Check for banned words
+    if (this.containsBannedWords(sanitizedTopic)) {
+      this.snackBar.open('Please enter a valid educational topic. Inappropriate content is not allowed.', 'Close', { duration: 5000 });
+      return;
+    }
+
+    this.isLoading = true;
+    setTimeout(() => {
+      this.router.navigate(['/quiz', sanitizedTopic], {
+        queryParams: { count: this.questionCount }
+      });
+      this.isLoading = false;
+    }, 500);
   }
 
   startQuizWithTopic(topicName: string) {
