@@ -61,6 +61,37 @@ interface ChapterItem {
           </mat-card>
         </div>
 
+        <!-- Question Count Selector -->
+        <div class="question-count-group">
+          <label class="count-pill">
+            <input
+              type="radio"
+              name="questionCount"
+              [value]="5"
+              [(ngModel)]="questionCount"
+              class="count-input"
+            />
+            <div class="pill-content">
+              <span class="pill-label">5 Questions</span>
+              <span class="pill-subtitle">Default quick set</span>
+            </div>
+          </label>
+
+          <label class="count-pill">
+            <input
+              type="radio"
+              name="questionCount"
+              [value]="10"
+              [(ngModel)]="questionCount"
+              class="count-input"
+            />
+            <div class="pill-content">
+              <span class="pill-label">10 Questions</span>
+              <span class="pill-subtitle">Full practice set</span>
+            </div>
+          </label>
+        </div>
+
         <!-- Action Buttons -->
         <div class="action-buttons">
           <button
@@ -99,6 +130,7 @@ export class CbseChaptersComponent implements OnInit {
   subjectKey = '';
   subjectDisplayName = '';
   chapters: ChapterItem[] = [];
+  questionCount = 5;
 
   get selectedChapters(): ChapterItem[] {
     return this.chapters.filter(c => c.selected);
@@ -170,7 +202,9 @@ export class CbseChaptersComponent implements OnInit {
     const selectedChapterNames = this.selectedChapters.map(c => c.name);
     const quizTopic = `CBSE Class ${this.classNumber} ${this.subjectDisplayName}: ${selectedChapterNames.join(', ')}`;
 
-    this.router.navigate(['/quiz', quizTopic]);
+    this.router.navigate(['/quiz', quizTopic], {
+      queryParams: { count: this.questionCount }
+    });
   }
 
   goBack() {
