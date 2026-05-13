@@ -52,12 +52,12 @@ export class CurriculumService {
     this.curriculumLoading$.next(true);
 
     // Dynamically import the curriculum data
-    return import('../../data/ncert-curriculum')
+    return import('../data/ncert-curriculum')
       .then(module => {
         this.curriculumCache = module.NCERT_CURRICULUM;
         this.curriculumLoading$.next(false);
         this.curriculumLoaded$.next(true);
-        return this.curriculumCache;
+        return this.curriculumCache!;
       })
       .catch(error => {
         console.error('Error loading curriculum:', error);
