@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,8 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
-import { NCERT_CURRICULUM } from '../../data/ncert-curriculum';
+import { CurriculumService } from '../../services/curriculum.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface ChapterItem {
   id: string;
@@ -26,7 +29,8 @@ interface ChapterItem {
     MatCardModule,
     MatCheckboxModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   template: `
     <div class="cbse-chapters-container">
@@ -41,8 +45,14 @@ interface ChapterItem {
         </div>
       </div>
 
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading$ | async" class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading chapters...</p>
+      </div>
+
       <!-- Chapters List -->
-      <div class="chapters-section">
+      <div class="chapters-section" *ngIf="!(isLoading$ | async)">
         <div class="chapters-grid">
           <mat-card *ngFor="let chapter of chapters" class="chapter-card" [class.selected]="chapter.selected">
             <mat-card-content>
@@ -125,12 +135,14 @@ interface ChapterItem {
   `,
   styleUrls: ['./cbse-chapters.component.css']
 })
-export class CbseChaptersComponent implements OnInit {
+export class CbseChaptersComponent implements OnInit, OnDestroy {
   classNumber = 0;
   subjectKey = '';
   subjectDisplayName = '';
   chapters: ChapterItem[] = [];
   questionCount = 5;
+  isLoading$: Subject<boolean>;
+  private destroy$ = new Subject<void>();
 
   get selectedChapters(): ChapterItem[] {
     return this.chapters.filter(c => c.selected);
@@ -139,8 +151,11 @@ export class CbseChaptersComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private curriculumService: CurriculumService
+  ) {
+    this.isLoading$ = new Subject<boolean>();
+  }
 
   ngOnInit() {
     this.classNumber = +this.route.snapshot.paramMap.get('classNumber')!;
@@ -148,35 +163,44 @@ export class CbseChaptersComponent implements OnInit {
     this.loadChapters();
   }
 
-  private getClassCurriculum() {
-    return NCERT_CURRICULUM.find(item => item.classNumber === this.classNumber);
-  }
-
-  private findSubject(subjectKey: string) {
-    const curriculum = this.getClassCurriculum();
-    return curriculum?.subjects.find(subject => subject.id.replace(/^class\d+-/, '') === subjectKey);
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadChapters() {
-    const subject = this.findSubject(this.subjectKey);
-
-    if (subject) {
-      this.subjectDisplayName = subject.name;
-      this.chapters = subject.chapters.map(chapter => ({
-        id: chapter.id,
-        name: chapter.name,
-        description: `NCERT syllabus chapter`,
-        selected: false
-      }));
-      return;
-    }
-
-    this.subjectDisplayName = this.subjectKey.replace(/-/g, ' ');
-    this.chapters = [
-      { id: '1', name: 'Chapter 1', description: 'Introduction to the subject', selected: false },
-      { id: '2', name: 'Chapter 2', description: 'Basic concepts', selected: false },
-      { id: '3', name: 'Chapter 3', description: 'Advanced topics', selected: false }
-    ];
+    this.isLoading$.next(true);
+    this.curriculumService
+      .getChaptersForSubject$(this.classNumber, `class${this.classNumber}-${this.subjectKey}`)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (chaptersData) => {
+          if (chaptersData.length > 0) {
+            this.subjectDisplayName = this.subjectKey.replace(/-/g, ' ');
+            this.chapters = chaptersData.map(chapter => ({
+              id: chapter.id,
+              name: chapter.name,
+              description: `NCERT syllabus chapter`,
+              selected: false
+            }));
+          } else {
+            // Fallback for subjects not in curriculum
+            this.subjectDisplayName = this.subjectKey.replace(/-/g, ' ');
+            this.chapters = [
+              { id: '1', name: 'Chapter 1', description: 'Introduction to the subject', selected: false },
+              { id: '2', name: 'Chapter 2', description: 'Basic concepts', selected: false },
+              { id: '3', name: 'Chapter 3', description: 'Advanced topics', selected: false }
+            ];
+          }
+          this.isLoading$.next(false);
+        },
+        error: (error) => {
+          console.error('Error loading chapters:', error);
+          this.isLoading$.next(false);
+          this.subjectDisplayName = this.subjectKey.replace(/-/g, ' ');
+          this.chapters = [];
+        }
+      });
   }
 
   onChapterToggle(chapter: ChapterItem) {

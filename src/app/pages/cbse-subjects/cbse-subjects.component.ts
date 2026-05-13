@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { NCERT_CURRICULUM } from '../../data/ncert-curriculum';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CurriculumService } from '../../services/curriculum.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface SubjectCard {
   key: string;
@@ -39,7 +42,8 @@ const SUBJECT_META: Record<string, { icon: string; description: string; displayN
     CommonModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
   template: `
     <div class="cbse-subjects-container">
@@ -54,8 +58,14 @@ const SUBJECT_META: Record<string, { icon: string; description: string; displayN
         </div>
       </div>
 
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading$ | async" class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading subjects...</p>
+      </div>
+
       <!-- Subjects Grid -->
-      <div class="subjects-section">
+      <div class="subjects-section" *ngIf="!(isLoading$ | async)">
         <div class="subjects-grid">
           <mat-card
             *ngFor="let subject of subjects"
@@ -78,47 +88,61 @@ const SUBJECT_META: Record<string, { icon: string; description: string; displayN
   `,
   styleUrls: ['./cbse-subjects.component.css']
 })
-export class CbseSubjectsComponent implements OnInit {
+export class CbseSubjectsComponent implements OnInit, OnDestroy {
   classNumber = 0;
   subjects: SubjectCard[] = [];
+  isLoading$: Subject<boolean>;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
-  ) {}
+    private router: Router,
+    private curriculumService: CurriculumService
+  ) {
+    this.isLoading$ = new Subject<boolean>();
+  }
 
   ngOnInit() {
     this.classNumber = +this.route.snapshot.paramMap.get('classNumber')!;
     this.loadSubjects();
   }
 
-  private getClassCurriculum() {
-    return NCERT_CURRICULUM.find(item => item.classNumber === this.classNumber);
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadSubjects() {
-    const classCurriculum = this.getClassCurriculum();
-    if (!classCurriculum) {
-      this.subjects = [];
-      return;
-    }
+    this.isLoading$.next(true);
+    this.curriculumService
+      .getSubjectsForClass$(this.classNumber)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (subjectsData) => {
+          this.subjects = subjectsData.map(subject => {
+            const subjectKey = subject.id.replace(/^class\d+-/, '');
+            const meta = SUBJECT_META[subjectKey] || {
+              icon: '📘',
+              description: 'NCERT curriculum subject',
+              displayName: subject.name
+            };
 
-    this.subjects = classCurriculum.subjects.map(subject => {
-      const subjectKey = subject.id.replace(/^class\d+-/, '');
-      const meta = SUBJECT_META[subjectKey] || {
-        icon: '📘',
-        description: 'NCERT curriculum subject',
-        displayName: subject.name
-      };
-
-      return {
-        key: subjectKey,
-        name: meta.displayName,
-        icon: meta.icon,
-        description: meta.description,
-        available: true
-      };
-    });
+            return {
+              key: subjectKey,
+              name: meta.displayName,
+              icon: meta.icon,
+              description: meta.description,
+              available: true
+            };
+          });
+          this.isLoading$.next(false);
+        },
+        error: (error) => {
+          console.error('Error loading subjects:', error);
+          this.isLoading$.next(false);
+          this.subjects = [];
+        }
+      });
   }
 
   selectSubject(subjectKey: string) {

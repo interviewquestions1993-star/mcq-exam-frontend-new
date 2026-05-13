@@ -4,17 +4,18 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { SeoService } from './services/seo.service';
+import { LogoComponent } from './components/logo/logo.component';
 
 declare let gtag: Function;
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, MatIconModule],
+  imports: [RouterOutlet, RouterLink, MatIconModule, LogoComponent],
   template: `
     <header class="app-header">
       <div class="toolbar-container">
-        <a class="logo" routerLink="/">🎓 MCQ Exam & Interview Preparer</a>
+        <app-logo></app-logo>
         <nav class="main-nav">
           <a routerLink="/about" class="nav-link about-link">
             <mat-icon>info</mat-icon>
