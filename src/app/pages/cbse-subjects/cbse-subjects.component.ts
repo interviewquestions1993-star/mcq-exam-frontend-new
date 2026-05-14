@@ -6,8 +6,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CurriculumService } from '../../services/curriculum.service';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 interface SubjectCard {
   key: string;
@@ -66,7 +67,10 @@ const SUBJECT_META: Record<string, { icon: string; description: string; displayN
 
       <!-- Subjects Grid -->
       <div class="subjects-section" *ngIf="!(isLoading$ | async)">
-        <div class="subjects-grid">
+        <div *ngIf="subjects.length === 0" class="empty-state">
+          <p>No subjects available for Class {{ classNumber }} yet.</p>
+        </div>
+        <div class="subjects-grid" *ngIf="subjects.length > 0">
           <mat-card
             *ngFor="let subject of subjects"
             class="subject-card"
@@ -91,16 +95,14 @@ const SUBJECT_META: Record<string, { icon: string; description: string; displayN
 export class CbseSubjectsComponent implements OnInit, OnDestroy {
   classNumber = 0;
   subjects: SubjectCard[] = [];
-  isLoading$: Subject<boolean>;
+  isLoading$ = new BehaviorSubject<boolean>(false);
   private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private curriculumService: CurriculumService
-  ) {
-    this.isLoading$ = new Subject<boolean>();
-  }
+  ) {}
 
   ngOnInit() {
     this.classNumber = +this.route.snapshot.paramMap.get('classNumber')!;

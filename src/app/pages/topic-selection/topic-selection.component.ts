@@ -213,6 +213,8 @@ export class TopicSelectionComponent implements OnInit {
     this.isLoading = true;
     this.error = '';
 
+    const normalizedTopicName = this.topicName.trim().toLowerCase();
+
     // Mock concepts data - in a real app, this would come from an API
     const mockConcepts: { [key: string]: TopicConcept[] } = {
       'Angular': [
@@ -299,7 +301,11 @@ export class TopicSelectionComponent implements OnInit {
 
     // Simulate API call delay
     setTimeout(() => {
-      this.concepts = mockConcepts[this.topicName] || [];
+      const matchedKey = Object.keys(mockConcepts).find(
+        key => key.toLowerCase() === normalizedTopicName
+      );
+
+      this.concepts = matchedKey ? mockConcepts[matchedKey] : [];
       this.isLoading = false;
 
       if (this.concepts.length === 0) {

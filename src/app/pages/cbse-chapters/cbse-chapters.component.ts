@@ -9,8 +9,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { CurriculumService } from '../../services/curriculum.service';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 interface ChapterItem {
   id: string;
@@ -53,7 +54,10 @@ interface ChapterItem {
 
       <!-- Chapters List -->
       <div class="chapters-section" *ngIf="!(isLoading$ | async)">
-        <div class="chapters-grid">
+        <div *ngIf="chapters.length === 0" class="empty-state">
+          <p>No chapters found for {{ subjectDisplayName || 'this subject' }}.</p>
+        </div>
+        <div class="chapters-grid" *ngIf="chapters.length > 0">
           <mat-card *ngFor="let chapter of chapters" class="chapter-card" [class.selected]="chapter.selected">
             <mat-card-content>
               <div class="chapter-header">
@@ -141,7 +145,7 @@ export class CbseChaptersComponent implements OnInit, OnDestroy {
   subjectDisplayName = '';
   chapters: ChapterItem[] = [];
   questionCount = 5;
-  isLoading$: Subject<boolean>;
+  isLoading$ = new BehaviorSubject<boolean>(false);
   private destroy$ = new Subject<void>();
 
   get selectedChapters(): ChapterItem[] {
@@ -153,9 +157,7 @@ export class CbseChaptersComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar,
     private curriculumService: CurriculumService
-  ) {
-    this.isLoading$ = new Subject<boolean>();
-  }
+  ) {}
 
   ngOnInit() {
     this.classNumber = +this.route.snapshot.paramMap.get('classNumber')!;

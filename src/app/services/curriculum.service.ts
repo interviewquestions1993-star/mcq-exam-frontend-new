@@ -54,7 +54,7 @@ export class CurriculumService {
     // Dynamically import the curriculum data
     return import('../data/ncert-curriculum')
       .then(module => {
-        this.curriculumCache = module.NCERT_CURRICULUM;
+        this.curriculumCache = module.NCERT_CURRICULUM || module.default;
         this.curriculumLoading$.next(false);
         this.curriculumLoaded$.next(true);
         return this.curriculumCache!;

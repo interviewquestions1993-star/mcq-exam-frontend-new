@@ -19,7 +19,21 @@
   gap: 16px;
 }
 
-/* Logo component now handles its own styling via logo.component.css */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+  opacity: 0.9;
+}
 
 .main-nav {
   display: flex;
