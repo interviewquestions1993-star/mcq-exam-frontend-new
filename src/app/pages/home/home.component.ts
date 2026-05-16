@@ -202,7 +202,7 @@ export class HomeComponent implements OnInit {
     'fuck', 'shit', 'damn', 'bitch', 'asshole', 'cunt', 'dick', 'pussy',
     'rape', 'murder', 'kill', 'death', 'suicide', 'drugs', 'cocaine', 'heroin',
     'terrorism', 'bomb', 'explosive', 'hack', 'crack', 'virus', 'malware',
-    'injection', 'sql', 'script', 'javascript', 'alert', 'eval', 'document.cookie'
+    'injection', 'script', 'alert', 'eval', 'document.cookie'
   ];
 
   constructor(private router: Router, private snackBar: MatSnackBar) {}
