@@ -247,9 +247,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Get return URL from route parameters or default to '/'
+    // Get return URL from route parameters or default to '/home'
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      this.returnUrl = params['returnUrl'] || '/';
+      const returnUrl = params['returnUrl'];
+      this.returnUrl = returnUrl && returnUrl !== '/' && returnUrl !== '/login' ? returnUrl : '/home';
     });
 
     // If already authenticated, redirect to home or return URL
@@ -305,9 +306,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       // Call the auth service to handle login
       this.authService.login(response);
       
-      // Redirect to return URL or home
+      const targetUrl = this.returnUrl && this.returnUrl !== '/' && this.returnUrl !== '/login' ? this.returnUrl : '/home';
       setTimeout(() => {
-        this.router.navigateByUrl(this.returnUrl);
+        this.router.navigateByUrl(targetUrl);
       }, 500);
     } catch (error) {
       console.error('Login error:', error);
