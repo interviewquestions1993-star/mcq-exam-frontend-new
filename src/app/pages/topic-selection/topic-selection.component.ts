@@ -302,7 +302,7 @@ export class TopicSelectionComponent implements OnInit {
         { id: '2', name: 'Biology: Cell Biology & Genetics', description: 'Cell structure, cell cycle, heredity, Mendelian genetics, and human genetics', selected: false },
         { id: '3', name: 'Biology: Physiology', description: 'Plant physiology, human physiology, nutrition, and health biology', selected: false },
         { id: '4', name: 'Biology: Ecology & Environment', description: 'Ecosystems, biodiversity, conservation, and human welfare topics', selected: false },
-        { id: '5', name: 'Biology: Biotechnology', description: 'Biotechnology applications and modern genetics tools', selected: false },
+        { id: '5', name: 'Biology: Biotechnology', description: 'Biotechnology, its applications, and modern genetics tools', selected: false },
         { id: '6', name: 'Chemistry: Physical Chemistry', description: 'Basic concepts, thermodynamics, equilibrium, kinetics, and solutions', selected: false },
         { id: '7', name: 'Chemistry: Inorganic Chemistry', description: 'Periodic table, chemical bonding, coordination compounds, and environmental chemistry', selected: false },
         { id: '8', name: 'Chemistry: Organic Chemistry', description: 'Hydrocarbons, functional groups, biomolecules, and reaction mechanisms', selected: false },
