@@ -12,11 +12,11 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
 import { PersistedMcqsComponent } from './pages/persisted-mcqs/persisted-mcqs.component';
 import { LoginComponent } from './pages/login/login.component';
-import { AuthGuard } from './services/auth.guard';
+import { AuthGuard, LoginGuard } from './services/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'topics/:topic', component: TopicSelectionComponent, canActivate: [AuthGuard] },
   { path: 'cbse', component: CbseComponent, canActivate: [AuthGuard] },
