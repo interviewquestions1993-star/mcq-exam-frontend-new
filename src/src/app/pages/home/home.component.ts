@@ -55,15 +55,6 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
             <span *ngIf="!isLoading">Start Quiz</span>
             <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
           </button>
-          <button
-            (click)="viewLibrary()"
-            class="view-library-button"
-            mat-stroked-button
-            color="primary"
-            style="margin-left:12px"
-          >
-            View Library
-          </button>
         </div>
         <div class="question-count-group">
           <label class="count-pill">
@@ -107,7 +98,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
           <span class="hint-chip">🔎 CBSE Class 10 Science Questions</span>
         </div>
         <p class="hint-note">...and many more topics are supported.</p>
-        <p class="hint-note">If you're preparing for next month's NEET reexam, try topic queries like "NEET Biology", "NEET Chemistry", or "NEET Physics" for targeted revision.</p>
+        <p class="hint-note">If you're preparing for next month's NEET reexam, try topic queries like "NEET Biology", "NEET Chemistry", or "NEET Physics" for targeted practice and high-yield review.</p>
         <p class="hint-note">If questions seem repetitive, try typing different search words or topics to generate a new set of questions.</p>
         <p class="hint-help"><mat-icon class="hint-mail-icon">email</mat-icon><a class="hint-mail-link" href="mailto:interviewquestions1993@gmail.com">Send us a mail if you want any new topics added.</a></p>
       </div>
@@ -184,6 +175,18 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
           </div>
         </div>
       </div>
+
+      <!-- View Persisted MCQs Section -->
+      <div class="persisted-mcqs-section">
+        <div class="persisted-card">
+          <div class="persisted-icon">📚</div>
+          <h3>Your MCQ Library</h3>
+          <p>View all the MCQ questions you've generated and saved</p>
+          <button mat-raised-button color="accent" (click)="viewPersistedMCQs()">
+            📖 View My Library
+          </button>
+        </div>
+      </div>
     </div>
   `,
   styleUrls: ['./home.component.css']
@@ -209,7 +212,7 @@ export class HomeComponent implements OnInit {
   ];
 
   // Security: List of banned words to prevent inappropriate content
-private bannedWords = [
+  private bannedWords = [
     'sex', 'adult', 'porn', 'nude', 'naked', 'erotic', 'xxx', 'nsfw',
     'fuck', 'shit', 'damn', 'bitch', 'asshole', 'cunt', 'dick', 'pussy',
     'rape', 'murder', 'kill', 'death', 'suicide', 'drugs', 'cocaine', 'heroin',
@@ -281,10 +284,7 @@ private bannedWords = [
     }
   }
 
-  viewLibrary() {
-    this.router.navigate(['/library']);
+  viewPersistedMCQs() {
+    this.router.navigate(['/persisted-mcqs']);
   }
 }
-
-
-
