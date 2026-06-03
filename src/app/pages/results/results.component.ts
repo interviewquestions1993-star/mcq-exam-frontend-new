@@ -146,7 +146,7 @@ export class ResultsComponent implements OnInit {
 
   goHome() {
     sessionStorage.removeItem('quizResults');
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 
   retakeQuiz() {

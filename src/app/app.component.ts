@@ -18,7 +18,7 @@ declare let gtag: Function;
   template: `
     <header class="app-header">
       <div class="toolbar-container">
-        <a class="logo" routerLink="/">🎓 MCQ Exam & Interview Preparer</a>
+        <a class="logo" routerLink="/home">🎓 MCQ Exam & Interview Preparer</a>
         <nav class="main-nav">
           <a routerLink="/about" class="nav-link about-link">
             <mat-icon>info</mat-icon>
@@ -130,7 +130,7 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   toggleTheme() {

@@ -238,7 +238,7 @@ import { takeUntil } from 'rxjs/operators';
 export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
   private destroy$ = new Subject<void>();
-  private returnUrl = '/';
+  private returnUrl = '/home';
 
   constructor(
     private authService: AuthService,

@@ -90,6 +90,6 @@ export class LibraryComponent implements OnInit {
   }
 
   goHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 }

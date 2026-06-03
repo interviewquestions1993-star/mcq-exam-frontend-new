@@ -373,6 +373,6 @@ export class TopicSelectionComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 }

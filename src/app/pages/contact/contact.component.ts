@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <div class="contact-container">
       <div class="page-header">
-        <button mat-raised-button color="primary" routerLink="/">
+        <button mat-raised-button color="primary" routerLink="/home">
           <mat-icon>home</mat-icon>
           Back to Home
         </button>

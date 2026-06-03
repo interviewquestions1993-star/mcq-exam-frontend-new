@@ -72,6 +72,6 @@ export class CbseComponent {
   }
 
   goBack() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 }

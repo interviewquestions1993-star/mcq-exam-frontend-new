@@ -15,18 +15,19 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'topics/:topic', component: TopicSelectionComponent },
-  { path: 'cbse', component: CbseComponent },
-  { path: 'cbse/:classNumber/subjects', component: CbseSubjectsComponent },
-  { path: 'cbse/:classNumber/subjects/:subject/chapters', component: CbseChaptersComponent },
-  { path: 'quiz/:topic', component: QuizComponent },
-  { path: 'results', component: ResultsComponent },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'topics/:topic', component: TopicSelectionComponent, canActivate: [AuthGuard] },
+  { path: 'cbse', component: CbseComponent, canActivate: [AuthGuard] },
+  { path: 'cbse/:classNumber/subjects', component: CbseSubjectsComponent, canActivate: [AuthGuard] },
+  { path: 'cbse/:classNumber/subjects/:subject/chapters', component: CbseChaptersComponent, canActivate: [AuthGuard] },
+  { path: 'quiz/:topic', component: QuizComponent, canActivate: [AuthGuard] },
+  { path: 'results', component: ResultsComponent, canActivate: [AuthGuard] },
   { path: 'persisted-mcqs', component: PersistedMcqsComponent, canActivate: [AuthGuard] },
-  { path: 'about', component: AboutComponent },
-  { path: 'contact', component: ContactComponent },
-  { path: 'privacy-policy', component: PrivacyPolicyComponent },
-  { path: 'terms-of-service', component: TermsOfServiceComponent },
-  { path: '**', redirectTo: '' }
+  { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
+  { path: 'contact', component: ContactComponent, canActivate: [AuthGuard] },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent, canActivate: [AuthGuard] },
+  { path: 'terms-of-service', component: TermsOfServiceComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: 'login' }
 ];

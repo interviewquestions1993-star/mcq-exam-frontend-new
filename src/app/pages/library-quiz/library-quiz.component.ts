@@ -55,6 +55,6 @@ export class LibraryQuizComponent implements OnInit {
   }
 
   goHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 }

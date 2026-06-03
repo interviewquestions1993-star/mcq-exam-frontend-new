@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   template: `
-    <a routerLink="/" class="logo-container">
+    <a routerLink="/home" class="logo-container">
       <svg class="logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
         <!-- Background circle -->
         <circle cx="60" cy="60" r="58" fill="rgba(255,255,255,0.1)" stroke="white" stroke-width="2"/>
