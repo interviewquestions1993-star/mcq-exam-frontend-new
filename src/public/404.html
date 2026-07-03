@@ -58,6 +58,24 @@
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
     }
   </style>
+  <script>
+    // GitHub Pages SPA fallback: load index.html for client-side routes.
+    if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+      fetch('/index.html')
+        .then(function(response) {
+          return response.text();
+        })
+        .then(function(html) {
+          document.open();
+          document.write(html);
+          document.close();
+          window.history.replaceState(null, '', window.location.pathname);
+        })
+        .catch(function() {
+          console.warn('Unable to load SPA fallback index.html');
+        });
+    }
+  </script>
 </head>
 <body>
   <div class="error-container">
