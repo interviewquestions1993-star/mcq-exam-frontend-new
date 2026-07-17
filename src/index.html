@@ -130,8 +130,12 @@
 
   <!-- API Configuration -->
   <script>
-    // Always use the deployed backend, even when running the frontend locally.
-    window.__API_URL__ = 'https://mcq-exam-backend-new-v1.onrender.com';
+    // Point to local backend if running locally, otherwise use deployed backend
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      window.__API_URL__ = 'http://localhost:8000';
+    } else {
+      window.__API_URL__ = 'https://mcq-exam-backend-new-v1.onrender.com';
+    }
     console.log('API URL:', window.__API_URL__);
   </script>
 
