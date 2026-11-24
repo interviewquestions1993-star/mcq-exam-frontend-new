@@ -1,61 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-
-  <!-- Homepage -->
-  <url>
-    <loc>https://www.ai-mcq-trainer.in/</loc>
-    <lastmod>2024-05-10</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <!-- Main Pages -->
-  <url>
-    <loc>https://www.ai-mcq-trainer.in/about</loc>
-    <lastmod>2024-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://www.ai-mcq-trainer.in/contact</loc>
-    <lastmod>2024-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- CBSE Pages -->
-  <url>
-    <loc>https://www.ai-mcq-trainer.in/cbse</loc>
-    <lastmod>2024-05-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Topic Pages (Dynamic - will be updated by backend) -->
-  <url>
-    <loc>https://www.ai-mcq-trainer.in/topics</loc>
-    <lastmod>2024-05-10</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Legal Pages -->
-  <url>
-    <loc>https://www.ai-mcq-trainer.in/privacy-policy</loc>
-    <lastmod>2024-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://www.ai-mcq-trainer.in/terms-of-service</loc>
-    <lastmod>2024-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.ai-mcq-trainer.in/</loc><lastmod>2026-11-24</lastmod><priority>1.0</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/about</loc><lastmod>2026-11-24</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/contact</loc><lastmod>2026-11-24</lastmod><priority>0.5</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/cbse</loc><lastmod>2026-11-24</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/cbse/class-9/science/matter-in-our-surroundings</loc><lastmod>2026-11-24</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/cbse/class-9/science/motion</loc><lastmod>2026-11-24</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/cbse/class-9/math/number-systems</loc><lastmod>2026-11-24</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/cbse/class-10/science/electricity</loc><lastmod>2026-11-24</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/cbse/class-10/science/life-processes</loc><lastmod>2026-11-24</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/editorial-policy</loc><lastmod>2026-11-24</lastmod><priority>0.4</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/content-methodology</loc><lastmod>2026-11-24</lastmod><priority>0.4</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/privacy-policy</loc><lastmod>2026-11-24</lastmod><priority>0.4</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/terms-of-service</loc><lastmod>2026-11-24</lastmod><priority>0.4</priority></url>
+  <url><loc>https://www.ai-mcq-trainer.in/disclaimer</loc><lastmod>2026-11-24</lastmod><priority>0.4</priority></url>
 </urlset>
